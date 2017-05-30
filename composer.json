@@ -1,0 +1,37 @@
+{
+    "name": "sheikhheera/requent",
+    "version": "1.0.0",
+    "license": "MIT",
+    "description": "A graphQL like interface to map from request to eloquent query with response transformation.",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Sheikh Heera",
+            "email": "heera.sheikh77@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "illuminate/http": ">=5.3",
+        "illuminate/config": ">=5.3",
+        "illuminate/database": ">=5.3",
+        "illuminate/pagination": ">=5.3"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.6",
+        "phpunit/phpunit": "5.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Requent\\": "src/Requent"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Requent\\": "tests/Requent/"
+        },
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    }
+}
