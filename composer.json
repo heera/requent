@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "license": "MIT",
     "description": "A graphQL like interface to map from request to eloquent query with response transformation.",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Sheikh Heera",
