@@ -108,6 +108,6 @@ class RequentTest extends TestCase
         $result = $requent->resource(
             (new User)->orderByDesc('id')->limit(1)
         )->original()->get();
-        $this->assertTrue(count($result) === 1);
+        $this->assertTrue(count($result) == 1);
     }
 }
