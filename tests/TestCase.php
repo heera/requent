@@ -15,6 +15,7 @@ class TestCase extends PhpunitTestCase
     public function setUp()
     {
         $this->config = require(__DIR__.'/../src/Requent/Config/requent.php');
+        $this->config['collection_key'] = 'data';
         $this->bootEloquent();
         $this->migrateDatabase();
     }
