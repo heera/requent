@@ -134,16 +134,6 @@ abstract class Transformer
     }
 
     /**
-     * Shortcut for transformResult after executing the query
-     * @param  Mixed $result
-     * @return Array
-     */
-    public static function trans($result)
-    {
-        return (new static)->transformResult($result);
-    }
-
-    /**
      * Catch all missing methods
      * @param  String $method
      * @param  Array $params
