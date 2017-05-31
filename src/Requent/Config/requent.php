@@ -12,7 +12,7 @@ return [
     | override it if you wish.
     |
     */
-    'fields_parameter_name' => 'fields',
+    'query_parameter_name' => 'fields',
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return [
     | package will use "per_page" so you can pass ?per_page=10 to get 10 items
     |  per page unless you override it here.
     */
-    'paginator_per_page_name' => 'per_page',
+    'per_page_identifier' => 'per_page',
 
     /*
     |--------------------------------------------------------------------------

@@ -75,7 +75,7 @@ class TestCase extends PhpunitTestCase
 
     protected function makeRequentInstance($query)
     {
-        $key = $this->config['fields_parameter_name'];
+        $key = $this->config['query_parameter_name'];
         $parsedArray = Parser::parse(
             isset($query[$key]) ? $query[$key] : '', $key
         );

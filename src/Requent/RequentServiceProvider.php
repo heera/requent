@@ -30,7 +30,7 @@ class RequentServiceProvider extends ServiceProvider
 	protected function makeRequentInstance()
 	{
 		$config = $this->app->config->get('requent');
-		$key = $config['fields_parameter_name'];
+		$key = $config['query_parameter_name'];
 		$query = $this->app->request->query();
 		$parsedArray = Parser::parse(
 			isset($query[$key]) ? $query[$key] : '', $key
