@@ -45,7 +45,7 @@ class RequentTest extends TestCase
         $requent = $this->makeRequentInstance($queryString);
 
         $result = $requent->resource(User::class)->first();
-        $this->assertTrue(isset($result['name']) && count($result['posts']));
+        $this->assertTrue(isset($result['name']) && (Bool) count($result['posts']));
     }
 
     public function testCustomTransformedData()
