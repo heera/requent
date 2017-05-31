@@ -1,14 +1,14 @@
 <?php
 
 return [
-	
-	/*
+    
+    /*
     |--------------------------------------------------------------------------
-    | Query String Parameter Name
+    | Query Parameter Name
     |--------------------------------------------------------------------------
     |
     | Here you may define the parameter name to pass your query string
-    | to select fields/columns. By default, "field" is set but you may
+    | to select fields/columns. By default, "fields" is set but you may
     | override it if you wish.
     |
     */
@@ -56,10 +56,10 @@ return [
     | Default Attributes Selection
     |--------------------------------------------------------------------------
     |
-    | Here you may define define whether you would like to load all properties
-    | from a model if no property was explicitly selected using the query string.
-    | If you just select relations of a model, the package will load all the attributes
-    | by default unless you override it here by setting the value to "false/null".
+    | Here you may define whether you would like to load all properties/attributes
+    | from a model if no property was explicitly selected using the query string. If
+    | you just select relations of a model, the package will load all the attributes
+    | by default unless you override it here by setting the value to false.
     */
     'select_default_attributes' => true,
 
@@ -67,15 +67,15 @@ return [
     |--------------------------------------------------------------------------
     | Collection Key
     |--------------------------------------------------------------------------
-    |
     | The Laravel framework returns an array of objects when you load collections.
     | Only, the paginated items are wrapped within a "data" key in the result. In
     | this case, this package will allow you to wrap the non-paginated collection
-    | into a key. By default, it'll use "data" but you may override it here or you
-    | can pass an argument when executing the query using Requent. If, you provide
-    | a value here, then by default, this will be used and you can turn it off by
-    | simply setting a falsy value here, i.e: null or false.
-    |
+    | into a key. By default, the result will be same as laravel rturns unless you
+    | want to wrap it using a key by setting "collection_key" to some truthy value.
+    | By default, it's turned off but if you want to use this feature then set the
+    | key name here. Alternatively, you can set it on run time by passing an argument
+    | when executing the query using Requent. If, you provide a value here, then by default,
+    | this will be used and you can turn it off by setting a falsy value here, i.e: false.
     */
-    'collection_key' => 'data',
+    'collection_key' => false,
 ];
