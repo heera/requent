@@ -70,7 +70,7 @@ class RequentTest extends TestCase
         $this->assertTrue(isset(
             $result['name'],
             $result['email']
-        ) && (Bool) count($result['posts']) == 2);
+        ) && (Bool) (count($result['posts']) == 2));
     }
 
     public function testKeyBy()
