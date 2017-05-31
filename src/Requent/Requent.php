@@ -149,7 +149,7 @@ class Requent
 	 */
 	protected function getQueryableData()
 	{
-		$key = $this->getConfigValue('fields_parameter_name');
+		$key = $this->getConfigValue('query_parameter_name');
 		return [$key => $this->selectedColumns];
 	}
 
@@ -211,7 +211,7 @@ class Requent
 	 */
 	protected function isFieldParser($method)
 	{
-		return $method == $this->getConfigValue('fields_parameter_name');
+		return $method == $this->getConfigValue('query_parameter_name');
 	}
 
 	/**

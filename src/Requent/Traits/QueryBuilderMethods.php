@@ -99,7 +99,7 @@ trait QueryBuilderMethods
         $page = $page ?: $this->getQueryStringValue('perPage');
         $page = $page ?: $this->getQueryStringValue('per_page');
         $page = $page ?: $this->getQueryStringValue(
-            $this->getConfigValue('paginator_per_page_name')
+            $this->getConfigValue('per_page_identifier')
         );
         return $page;
     }

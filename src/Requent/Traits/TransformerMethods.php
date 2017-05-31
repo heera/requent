@@ -47,7 +47,7 @@ trait TransformerMethods
      */
     protected function getSelectables($selectables)
     {
-        $paramName = $this->getConfigValue('fields_parameter_name');
+        $paramName = $this->getConfigValue('query_parameter_name');
         foreach($selectables as $field => $value) {
             if($value !== true) {
                 if(isset($value[$paramName])) {
