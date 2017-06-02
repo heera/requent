@@ -146,8 +146,8 @@ class DefaultTransformer
     protected function getSelectbles($selectables, $model)
     {
     	if($this->getConfigValue('select_default_attributes')) {
-    		if(!array_diff_key($selectables, $model->getRelations())) {
-	    		return array_merge($model->getAttributes(), $selectables);
+    		if(!array_diff_key($selectables, $relations = $model->getRelations())) {
+	    		return array_merge(array_diff_key($model->toArray(), $relations), $selectables);
 	    	}
     	}
     	return $selectables;

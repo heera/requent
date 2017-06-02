@@ -25,13 +25,12 @@ trait QueryBuilderMethods
      */
 	public function get($columns = ['*'])
     {
-        if ($perPage = $this->paged()) {
-            $pagination = $this->getQueryStringValue('pagination');
-            if($pagination = $pagination ?: $this->getConfigValue('default_paginator')) {
-                return $this->callPaginate($pagination, $perPage, $columns);
-            }
+        if(($perPage = $this->perPage()) || $this->isPaged()) {
+            $pagination = $this->getQueryStringValue(
+                $this->getConfigValue('paginator_identifier')
+            );
+            return $this->callPaginate($pagination, $perPage, $columns);
         }
-
         return $this->transform($this->builder->get($columns));
     }
 
@@ -43,7 +42,7 @@ trait QueryBuilderMethods
      */
     public function paginate($perPage = null, $columns = ['*'])
     {
-        $perPage = $perPage ?: $this->paged();
+        $perPage = $perPage ?: $this->perPage();
         list($perPage, $columns) = $this->normalizeParameters($perPage, $columns);
         $result = $this->builder->paginate($perPage, $columns);
         $result->appends($this->getQueryStringValue());
@@ -58,7 +57,7 @@ trait QueryBuilderMethods
      */
     public function simplePaginate($perPage = null, $columns = ['*'])
     {
-        $perPage = $perPage ?: $this->paged();
+        $perPage = $perPage ?: $this->perPage();
         list($perPage, $columns) = $this->normalizeParameters($perPage, $columns);
         $result = $this->builder->simplePaginate($perPage, $columns);
         $result->appends($this->getQueryStringValue());
@@ -89,11 +88,22 @@ trait QueryBuilderMethods
     }
 
     /**
+     * Check if paginated result was asked
+     * @return Boolean
+     */
+    protected function isPaged()
+    {
+        return isset($this->getQueryStringValue()[
+            $this->getConfigValue('paginator_identifier')
+        ]);
+    }
+
+    /**
      * Check if the paginated result is required
      * and find out the amount for the per page 
      * @return Mixed
      */
-    protected function paged()
+    protected function perPage()
     {
         $page = $this->getQueryStringValue('perpage');
         $page = $page ?: $this->getQueryStringValue('perPage');

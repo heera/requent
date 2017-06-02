@@ -27,6 +27,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Paginator Identifier
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the parameter name to get paginated data.
+    | By default, "paginate" is set but you may override it if you wish.
+    |
+    */
+    'paginator_identifier' => 'paginate',
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Paginator
     |--------------------------------------------------------------------------
     |
@@ -41,7 +52,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Paginator Per Page Name
+    | Per Page Identifier
     |--------------------------------------------------------------------------
     |
     | Here you may define the name of the query string to pass the number

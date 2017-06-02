@@ -14,11 +14,11 @@ trait TransformerHelper
 	 * @param  string $resourceKey
 	 * @return Array
 	 */
-	protected function transform($result, $transformer, $resourceKey = 'data')
+	protected function transform($result, $transformer, $resourceKey = null)
 	{
 		$transformer = is_string($transformer) ? new $transformer : $transformer;
 		$transformed = $transformer->transformResult($result);
-		if($result instanceof Collection) {
+		if($result instanceof Collection && !is_null($resourceKey)) {
 			return [$resourceKey => $transformed];
         }
         return $transformed;
