@@ -11,6 +11,7 @@ Add the following line in your "composer.json" file within "require" section and
 Once the installation is finished then you can start using it without any configurations. The following example is the most basic usage:
 
 ```php
+
 <?php
 
 namespace App\Http\Controllers;
