@@ -23,7 +23,7 @@ class UserController extends Controller
 {
     public function fetch($id = null)
     {
-	    return app(Requent::class)->resource(User::class)->fetch($id);
+	return app(Requent::class)->resource(User::class)->fetch($id);
     }
 }
 ```
