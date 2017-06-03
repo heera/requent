@@ -10,4 +10,6 @@ Add the following line in your "composer.json" file within "require" section and
 
 ## Basic Usage
 
-````return app('requent')->resource(User::class)->fetch($id);
+```php
+return app('requent')->resource(User::class)->fetch($id);
+```
