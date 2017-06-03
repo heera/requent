@@ -19,7 +19,7 @@ use App\Http\Controllers\Controller;
 use Requent\Requent;
 use App\User;
 
-class HomeController extends Controller
+class UserController extends Controller
 {
 	public function fetch($id = null)
 	{
