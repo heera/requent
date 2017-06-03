@@ -49,4 +49,11 @@ To, access any resource, we need a route, so for this example, we can declare a 
 Route::get('users', 'UserController@index');
 ````
 
-Now, if we hit the route using `http:\\example.com\users`, then it'll retuen all the users with posts and comments of each post.
+Now, if we hit the route using `http:\\example.com\users`, then it'll retuen all the users with posts and comments of each post. Now, this package will allow us to do the same thing using a different approach. For example, if we make request to the same route using `http:\\example.com\users?fields=posts{comments}` then it'll retuen the expected result. In this case, our `UserController` will need the following code:
+
+```php
+public function index()
+{
+    return Requent::resource(User::class)->get();
+}
+```
