@@ -10,5 +10,30 @@ Add the following line in your "composer.json" file within "require" section and
 
 This will install the package and once the installation is finished then you can start using it without any configurations but you can configure it for your need.
 
-To use the package in any of your controllers, you can import it using `use Requent\Requent` and can make an instance of it using `app(Requent::class)` from within any method but you can use the Requent facade class. To use the facade, you need to register the ServiceProvider class and the Facade class in your `config\app.php` file.
+To use the package in any of your controllers, you can import it using `use Requent\Requent` and can make an instance of it using `app(Requent::class)` from within any method but you can use the Requent facade class. To use the facade, you need to register the `ServiceProvider` class and the `Facade` class in your `config\app.php` file. To register the service provider add the following line in the `providers` array of your `config\app.php`:
 
+    Requent\RequentServiceProvider::class,
+    
+Then, add the following line in the `aliases` section:
+
+    'Requent' => Requent\Facade\Requent::class,
+    
+Now, you can use the package using the `Requent` facade from any controller, for example:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Requent;
+use App\User;
+use App\Http\Controllers\Controller;
+
+class UserController extends Controller
+{
+    public function index()
+    {
+        return Requent::resource(User::class)->get();
+    }
+}
+```
