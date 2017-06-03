@@ -57,3 +57,5 @@ public function index()
     return Requent::resource(User::class)->get();
 }
 ```
+
+This is the most basic use case but it offers more. We'll see everything step by step but first, let's get the overview of it.
