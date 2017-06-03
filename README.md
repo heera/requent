@@ -58,4 +58,4 @@ public function index()
 }
 ```
 
-This is the most basic use case but it offers more. We'll see everything step by step but first, let's get the overview of it.
+This is the most basic use case but it offers more. We'll see everything step by step but first, let's get the basic overview of it. At this point, the `get` method will return all the users as collection but we can get a paginated result even without changing the code in our `index` method. For exampe, we can make a request using `http:\\example.com\users?fields=posts{comments}&paginate`
