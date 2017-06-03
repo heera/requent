@@ -4,10 +4,26 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 
 ## Installation
 
-Add the following line in your "composer.json" file within require section and run `composer install` from terminal:
+Add the following line in your "composer.json" file within "require" section and run `composer install` from terminal:
 
     "sheikhheera/requent": "1.0.*"
 
-## Basic Usage
+Once the installation is finished then you can start using it without any configurations. The following example is the most basic usage:
 
-````return app('requent')->resource(User::class)->fetch($id);
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Requent\Requent;
+use App\User;
+
+class HomeController extends Controller
+{
+	public function fetch($id = null)
+	{
+		return app(Requent::class)->resource(User::class)->fetch($id);
+	}
+}
+```
