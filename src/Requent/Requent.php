@@ -81,14 +81,23 @@ class Requent
     	return $this->init($model, $transformer)->buildQuery();
     }
 
-/**
- * Return the original data without transforming
- * @return $this
- */
+	/**
+	 * Return the original data without transforming
+	 * @return $this
+	 */
     public function original()
     {
     	$this->original = true;
     	return $this;
+    }
+
+    /**
+	 * Return the original data without transforming
+	 * @return $this
+	 */
+    public function dontTransform()
+    {
+    	return $this->original();
     }
 
     /**
