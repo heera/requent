@@ -8,7 +8,7 @@ Add the following line in your "composer.json" file within "require" section and
 
     "sheikhheera/requent": "1.0.*"
 
-Once the installation is finished then you can start using it without any configurations. The following example is the most basic usage:
+Once the installation is finished then you can start using it without any configuration. The following example is the most basic usage:
 
 ```php
 <?php
@@ -23,7 +23,7 @@ class UserController extends Controller
 {
     public function fetch($id = null)
     {
-	return app(Requent::class)->resource(User::class)->fetch($id);
+	    return app(Requent::class)->resource(User::class)->fetch($id);
     }
 }
 ```
