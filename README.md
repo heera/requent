@@ -34,7 +34,7 @@ class UserController extends Controller
 Alos, imagine that, we've a route declaration like this:
 
 ```php
-Route::get('users', 'UserController@fetch');
+Route::get('users/{id?}', 'UserController@fetch');
 ```
 
 Now, if we hit the route, the given code will return us all the users with their related posts and comments of each post. Now, using the package we can achieve the same thing but also we can do much more. So let's see a very basic example first. The following example is the most basic usage:
@@ -57,4 +57,4 @@ class UserController extends Controller
 }
 ```
 
-At this point, if we hit the route using `http://example.com/users`, it'll just return us all the users but, if we want to load all the posts and comments then we just need to tell it using the URI query string parameter, using something like: `http://example.com/users?fields=posts{comments}`. If we want, we can select the attributes as well, for example: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will return us only selected fields/properties from each models. The user model will contain only "email" and each "posts" of the user model will contain only the "title" attribute and each "comments" model will contain the "body" property. This is the most basic usage of this package but there are more, so let's start from the beginning.
+At this point, if we hit the route using `http://example.com/users`, it'll just return us all the users but, if we want to load all the posts and comments then we just need to tell it using the URI query string parameter, using something like: `http://example.com/users?fields=posts{comments}`. If we want, we can select the attributes as well, for example: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will return us only selected fields/properties from each models. The user model will contain only "email" and each "posts" of the user model will contain only the "title" attribute and each "comments" model will contain the "body" property. Also, we can get a single user model just adding an id of a user using the same `fetch` method. For example: `http://example.com/users/1?fields=email,posts{title,comments{body}}`. This will give us a single user model with selected relation and attributes. This is the most basic usage of this package but there are more, so let's start from the beginning.
