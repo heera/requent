@@ -6,4 +6,4 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 
 Add the following line in your "composer.json" file within "require" section and run `composer install` from terminal:
 
-    "sheikhheera/requent": "1.0.*"
+   "sheikhheera/requent": "1.0.*"
