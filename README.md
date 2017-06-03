@@ -59,3 +59,5 @@ public function index()
 ```
 
 This is the most basic use case but it offers more. We'll see everything step by step but first, let's get the basic overview of it. At this point, the `get` method will return all the users as collection but we can get a paginated result even without changing the code in our `index` method. For exampe, to get a paginated result using `laravel's` default paginator, we can make a request using `http:\\example.com\users?fields=posts{comments}&paginate`. This will return us a paginated result using the `LengthAwarePaginator` but if we want then we can change the paginator by giving the value to the `paginate` parameter using something like `&paginate=simple`. So, we'll get the paginated result using `SimplePaginator`.
+
+We can also pass `per_page=10` to get 10 items for per request. In this case, if we pass the `per_page=10` parameter then we can skip the `paginate` parameter unless we want to set the paginator class from `default` to `simple`.
