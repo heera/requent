@@ -8,7 +8,7 @@ Add the following line in your "composer.json" file within "require" section and
 
     "sheikhheera/requent": "1.0.*"
 
-Once the installation is finished then you can start using it without any configuration.
+Once the installation is finished then you can start using it without any configuration. Let's get the basic idea first.
 
 ## Basic Usage
 
@@ -31,7 +31,13 @@ class UserController extends Controller
 }
 ```
 
-The given code will return us all the user with their related posts and comments of each post. Now, using the package we can achieve the same thing but also we can do much more. So let's see a very basic example first. The following example is the most basic usage:
+Alos, imagine that, we've a route declaration like this:
+
+```php
+Route::get('users', ''UserController@fetch);
+```
+
+Now, if we hit the route, the given code will return us all the user with their related posts and comments of each post. Now, using the package we can achieve the same thing but also we can do much more. So let's see a very basic example first. The following example is the most basic usage:
 
 ```php
 <?php
