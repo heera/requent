@@ -40,6 +40,6 @@ class UserController extends Controller
 }
 ```
 
-## TheUse Case
+## The Use Case
 
-So far, we just saw how to install and use it in our controller classes but we need to understand the ues case of the package first. So, the package actually allow us to read any resource from an end point (route) using GQL (Graph Query Language) like interface. For example, imagine that, we've a `User` model and a `Post` model and a `Comment` model. The `User` has many posts using `hasMany` relationship and each `Post` model have many comments using `hasMany` relationship.
+So far, we just saw how to install and use it in our controller classes but we need to understand the ues case of the package first. So, the package actually allow us to read any resource from an end point (route) using GQL (Graph Query Language) like interface. For example, imagine that, we've a `User` model and a `Post` model and a `Comment` model. The `User` has many posts using `hasMany` relationship and each `Post` model have many comments using `hasMany` relationship. So, as usual, we can grab all the posts of a user with comments of each post simply using `User::with('posts.comments')->get()`.
