@@ -62,5 +62,5 @@ This is the most basic use case but it offers more. We'll see everything step by
 
 We can also pass `per_page=10` to get 10 items for per request. In this case, if we pass the `per_page=10` parameter then we can skip the `paginate` parameter unless we want to set the paginator class from `default` to `simple`. So, we can get the paginated result using `http:\\example.com\users?fields=posts{comments}&per_page=10`. We can modify the parameter to indicate the number of pages for pagination in config including other settings. We'll walkthrough each options later.
 
-At this point, we've already selected the relations but if we want then we can also chose the attributes of each resource from the `URL` for example, we can make a request like `http:\\example.com\users?fields=email,posts{title,comments}&per_page=10`.
+At this point, we've already selected the relations but if we want then we can also chose the attributes of each resource from the `URL` for example, we can make a request to get only specific attributes from a model using something like the following: `http:\\example.com\users?fields=email,posts{title,comments}&per_page=10`.
 
