@@ -48,3 +48,5 @@ To, access any resource, we need a route, so for this example, we can declare a 
 ```php
 Route::get('users', 'UserController@index');
 ````
+
+Now, if we hit the route using `http:\\example.com\users`, then it'll retuen all the users with posts and comments of each post.
