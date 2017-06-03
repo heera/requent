@@ -34,10 +34,10 @@ class UserController extends Controller
 Alos, imagine that, we've a route declaration like this:
 
 ```php
-Route::get('users', ''UserController@fetch);
+Route::get('users', 'UserController@fetch');
 ```
 
-Now, if we hit the route, the given code will return us all the user with their related posts and comments of each post. Now, using the package we can achieve the same thing but also we can do much more. So let's see a very basic example first. The following example is the most basic usage:
+Now, if we hit the route, the given code will return us all the users with their related posts and comments of each post. Now, using the package we can achieve the same thing but also we can do much more. So let's see a very basic example first. The following example is the most basic usage:
 
 ```php
 <?php
@@ -56,3 +56,5 @@ class UserController extends Controller
     }
 }
 ```
+
+At this point, if we hit the route using `http://example.com/user`, it'll just return us all the users but, if we want to load all the posts and comments then we just need to tell it using the URI query string parameter, using something like: `http://example.com/user?fields=posts{comments}`.
