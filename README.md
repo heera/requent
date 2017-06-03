@@ -3,6 +3,7 @@
 An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent with zero configuration. It maps a request to eloquent query and transforms the result based on query parameters. It also supports to transform the query result explicitly using user defined transformers which provides a more secured way to exchange data from a public API with minimul effort.
 
 1. [Installation](#Installation)
+2. [Basic Usage](#Basic Usage)
 
 ## Installation
 
