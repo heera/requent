@@ -2,12 +2,10 @@
 
 namespace Requent\Transformer;
 
-use Illuminate\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
-abstract class Transformer
+abstract class Transformer extends BaseTransformer
 {
     /**
      * Abstract method to be implemented bt developer
@@ -16,24 +14,6 @@ abstract class Transformer
      * @return Array Transformed Result
      */
     public abstract function transform($model);
-
-    /**
-     * Transform the result came from QueryBuilder.
-     *
-     * @param Mixed $model
-     * @return Mixed
-     */
-    public function transformResult($result)
-    {
-        if ($result instanceof Model) {
-            return $this->transformItem($result, $this);
-        } elseif ($result instanceof Collection) {
-            return $this->transformItems($result, $this);
-        } elseif ($this->isPaginated($result)) {
-            return $this->transformPaginatedItems($result, $this);
-        }
-        return $result;
-    }
 
     /**
      * Transforms paginated result.
@@ -111,16 +91,6 @@ abstract class Transformer
     protected function transformRelation($transformer, $method, $relation)
     {
         return $relation ? $transformer->{$method}($relation) : $relation;
-    }
-
-    /**
-     * Determine whether the data is paginated
-     * @param  Mixed $data
-     * @return Boolean
-     */
-    protected function isPaginated($data)
-    {
-        return ($data instanceof Paginator || $data instanceof LengthAwarePaginator);
     }
 
     /**

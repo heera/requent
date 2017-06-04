@@ -15,7 +15,7 @@ class TestCase extends PhpunitTestCase
     public function setUp()
     {
         $this->config = require(__DIR__.'/../src/Requent/Config/requent.php');
-        $this->config['collection_key'] = 'data';
+        $this->config['resource_key'] = 'data';
         $this->bootEloquent();
         $this->migrateDatabase();
     }
@@ -76,7 +76,7 @@ class TestCase extends PhpunitTestCase
 
     protected function makeRequentInstance($query)
     {
-        $key = $this->config['query_parameter_name'];
+        $key = $this->config['query_identifier'];
         $parsedArray = Parser::parse(
             isset($query[$key]) ? $query[$key] : '', $key
         );
