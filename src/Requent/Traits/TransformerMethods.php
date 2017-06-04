@@ -2,8 +2,9 @@
 
 namespace Requent\Traits;
 
-use Requent\Transformer\DefaultTransformer;
-use Illuminate\Database\Eloquent\Collection;
+use Requent\Transformer\Transformer;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait TransformerMethods
 {
@@ -16,12 +17,16 @@ trait TransformerMethods
     {
         if($this->original) return $result;
 
-        $transformed = $this->resolveTransformer()->transformResult($result);
-        if($result instanceof Collection) {
-            if($resourceKey = $this->getCollectionKey()) {
+        $transformed = $this->resolveTransformer()->transformResult(
+            $result, $this->getSelectables($this->selectedColumns)
+        );
+
+        if(!$this->isPaginated($result)) {
+            if($resourceKey = $this->getResourceKey()) {
                 return [$resourceKey => $transformed];
             }
         }
+
         return $transformed;
     }
 
@@ -31,28 +36,40 @@ trait TransformerMethods
      */
     protected function resolveTransformer()
     {
-        if($transformer = $this->transformer) {
-            return is_string($transformer) ? new $transformer : $transformer;
+        if(is_string($this->transformer)) {
+            $this->transformer = new $this->transformer;
         }
-        return new DefaultTransformer(
-            $this->getConfigValue(),
-            $this->getSelectables($this->selectedColumns)
-        );
+
+        return $this->transformer->setConfig($this->getConfigValue());
     }
 
     /**
      * Get the selectable fields/columns
-     * @param  Array $selectables
-     * @return Array
+     * @param  Mixed $selectables
+     * @return Mixed
      */
     protected function getSelectables($selectables)
     {
-        $paramName = $this->getConfigValue('query_parameter_name');
+        if($this->transformer instanceof Transformer) {
+            return $this->transformer;
+        }
+        
+        return $this->getFieldsForDefaultTransformer($selectables);
+    }
+
+    /**
+     * Get selectables for DefaultTransformer
+     * @param  Array $selectables
+     * @return Array
+     */
+    protected function getFieldsForDefaultTransformer($selectables)
+    {
+        $paramName = $this->getConfigValue('query_identifier');
         foreach($selectables as $field => $value) {
             if($value !== true) {
                 if(isset($value[$paramName])) {
                     if(!empty($value[$paramName])) {
-                        $selectables[$field] = $this->getSelectables($value[$paramName]);                 
+                        $selectables[$field] = $this->{__FUNCTION__}($value[$paramName]);
                     } else {
                         unset($selectables[$field]);
                     }
@@ -65,11 +82,21 @@ trait TransformerMethods
     }
 
     /**
+     * Determine whether the data is paginated
+     * @param  Mixed $data
+     * @return Boolean
+     */
+    protected function isPaginated($data)
+    {
+        return ($data instanceof Paginator || $data instanceof LengthAwarePaginator);
+    }
+
+    /**
      * Get the key name to wrap the collection
      * @return String
      */
-    protected function getCollectionKey()
+    protected function getResourceKey()
     {
-        return $this->collectionKey;
+        return $this->resourceKey;
     }
 }

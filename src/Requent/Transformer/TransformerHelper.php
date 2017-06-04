@@ -3,7 +3,8 @@
 namespace Requent\Transformer;
 
 use Requent\Transformer\Transformer;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait TransformerHelper
 {
@@ -17,10 +18,20 @@ trait TransformerHelper
 	protected function transform($result, $transformer, $resourceKey = null)
 	{
 		$transformer = is_string($transformer) ? new $transformer : $transformer;
-		$transformed = $transformer->transformResult($result);
-		if($result instanceof Collection && !is_null($resourceKey)) {
+		$transformed = $transformer->transformResult($result, $transformer);
+		if(!$this->isPaginated($result) && !is_null($resourceKey)) {
 			return [$resourceKey => $transformed];
         }
         return $transformed;
 	}
+
+	/**
+     * Determine whether the data is paginated
+     * @param  Mixed $data
+     * @return Boolean
+     */
+    protected function isPaginated($data)
+    {
+        return ($data instanceof Paginator || $data instanceof LengthAwarePaginator);
+    }
 }

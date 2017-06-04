@@ -11,7 +11,7 @@ namespace Requent;
 use BadMethodCallException;
 use Requent\Traits\QueryBuilderMethods;
 use Illuminate\Database\Eloquent\Builder;
-
+use Requent\Transformer\DefaultTransformer;
 class Requent
 {
 	use QueryBuilderMethods;
@@ -44,7 +44,7 @@ class Requent
 	 * The key to wrap the collection
 	 * @var String
 	 */
-	protected $collectionKey = null;
+	protected $resourceKey = null;
 
 	/**
 	 * The selected columns
@@ -76,28 +76,19 @@ class Requent
 	 * @param  Mixed $transformer Transform Name|Object
 	 * @return $this
 	 */
-	public function resource($model, $transformer = null)
+	public function resource($model, $transformer = DefaultTransformer::class)
     {
     	return $this->init($model, $transformer)->buildQuery();
-    }
-
-	/**
-	 * Return the original data without transforming
-	 * @return $this
-	 */
-    public function original()
-    {
-    	$this->original = true;
-    	return $this;
     }
 
     /**
 	 * Return the original data without transforming
 	 * @return $this
 	 */
-    public function dontTransform()
+    public function raw()
     {
-    	return $this->original();
+    	$this->original = true;
+    	return $this;
     }
 
     /**
@@ -119,7 +110,7 @@ class Requent
      */
     public function keyBy($key)
     {
-    	$this->collectionKey = $key;
+    	$this->resourceKey = $key;
     	return $this;
     }
 
@@ -132,7 +123,6 @@ class Requent
     protected function init($model, $transformer)
 	{
 		$this->transformer = $transformer;
-		$this->collectionKey = $this->getConfigValue('collection_key');
 		if(!is_null($model)) {
 			$this->model = is_string($model) ? new $model : $model;
 		}
@@ -158,7 +148,7 @@ class Requent
 	 */
 	protected function getQueryableData()
 	{
-		$key = $this->getConfigValue('query_parameter_name');
+		$key = $this->getConfigValue('query_identifier');
 		return [$key => $this->selectedColumns];
 	}
 
@@ -220,7 +210,7 @@ class Requent
 	 */
 	protected function isFieldParser($method)
 	{
-		return $method == $this->getConfigValue('query_parameter_name');
+		return $method == $this->getConfigValue('query_identifier');
 	}
 
 	/**
@@ -277,7 +267,7 @@ class Requent
 	protected function getSearchQueryValue()
 	{
 		return $this->getQueryStringValue(
-			$this->getConfigValue('search_parameter_name')
+			$this->getConfigValue('search_identifier')
 		);
 	}
 

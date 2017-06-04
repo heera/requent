@@ -18,7 +18,7 @@ class RequentTest extends TestCase
         $requent = $this->makeRequentInstance($queryString);
         
         $result = $requent->resource(User::class)->fetch();
-        $this->assertTrue(!!count($result['data']));
+        $this->assertTrue(!!count($result));
     }
 
     public function testCollectionData()
@@ -27,7 +27,7 @@ class RequentTest extends TestCase
         $requent = $this->makeRequentInstance($queryString);
         
         $result = $requent->resource(User::class)->get();
-        $this->assertTrue(!!count($result['data']));
+        $this->assertTrue(!!count($result));
     }
 
     public function testPaginatedData()
@@ -87,7 +87,7 @@ class RequentTest extends TestCase
         $queryString = [];
         $requent = $this->makeRequentInstance($queryString);
         
-        $result = $requent->resource(User::class)->original()->first();
+        $result = $requent->resource(User::class)->raw()->first();
         $this->assertTrue($result instanceof Model);
     }
 
@@ -96,7 +96,7 @@ class RequentTest extends TestCase
         $queryString = [];
         $requent = $this->makeRequentInstance($queryString);
         
-        $result = $requent->resource(User::class)->original()->get();
+        $result = $requent->resource(User::class)->raw()->get();
         $this->assertTrue($result instanceof Collection);
     }
 
@@ -107,7 +107,7 @@ class RequentTest extends TestCase
         
         $result = $requent->resource(
             (new User)->orderByDesc('id')->limit(1)
-        )->original()->get();
+        )->raw()->get();
         $this->assertTrue(count($result) == 1);
     }
 }

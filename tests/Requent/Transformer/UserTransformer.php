@@ -2,10 +2,10 @@
 
 namespace Requent\Transformer;
 
-use Requent\Transformer\Transformer as BaseTransformer;
+use Requent\Transformer\Transformer as AbstractTransformer;
 use Requent\Transformer\PostTransformer;
 
-class UserTransformer extends BaseTransformer
+class UserTransformer extends AbstractTransformer
 {
 	public function transform($model)
 	{
