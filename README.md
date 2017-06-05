@@ -49,7 +49,7 @@ class UserController extends Controller
     }
 }
 ```
-Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email property) with all the related posts (only title property) and all the comments of each post (only body propert).
+Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email column from `User`) with all the related posts (only title column from `Post`) and all the comments of each post (only body column from `Comment`).
 
 If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it more.
 
