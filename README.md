@@ -83,7 +83,7 @@ $result = Requent::resource(
 ->find($id);
 ```
 
-We'll walkthrough all the available methods and features that `Requent` offers. Let's continue.
+We'll walk-through all the available methods and features that `Requent` offers. Let's continue.
 
 ## <a name="methods"> Methods
 
@@ -199,7 +199,7 @@ The paginated result will remain the same, by default `Laravel` wraps the collec
 
 So far we've seen the default data transformation, which means that, a user can get any property or available relations of the resource just by asking it through the query string parameter `fields` (we can use something else other than `fields`), but there is no way to keep some data private if you are using this for a public `API`. Here, the `transformer` comes into play.
 
-By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments}}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return. To create a trunsformer, you just need to create transformer classes by extending the `Requent\Transformer\Transformer` class. For example:
+By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return. To create a trunsformer, you just need to create transformer classes by extending the `Requent\Transformer\Transformer` class. For example:
 
 ```php
 <?php
@@ -244,7 +244,7 @@ Also, the `transformBy` method accepts a transformer object instance:
 return Requent::resource(User::class)->transformBy(new UserTransformer)->fetch($id);
 ```
 
-This will transform the resource using by calling the `transform` method defined in the transformer class you created. In this case, the transform mathod will called to transform the `User` model but right now, it'll not load any relations. Which means, if the `URL` is something like: `http://example.com/users?fields=posts{comments}}` then only the `User` model will be transformed and the result would be something like the following:
+This will transform the resource using by calling the `transform` method defined in the transformer class you created. In this case, the transform mathod will called to transform the `User` model but right now, it'll not load any relations. Which means, if the `URL` is something like: `http://example.com/users?fields=posts{comments}` then only the `User` model will be transformed and the result would be something like the following:
 
 <pre>
 [
@@ -261,4 +261,25 @@ This will transform the resource using by calling the `transform` method defined
     // ...
 ]
 </pre>
-To load any relations from the root transformer (`UserTransformer` in this case), we also need to explicitly declare a method using the same name the relation is defined in the model, so for example to load the related posts with each `User`  model we need to declare a `posts` method in our `UserTransformer` class.
+To load any relations from the root transformer (`UserTransformer` in this case), we also need to explicitly declare a method using the same name the relation is defined in the model, so for example to load the related posts with each `User`  model we need to declare a `posts` method in our `UserTransformer` class. For example:
+
+```php
+class UserTransformer extends Transformer
+{
+    public function transform($model)
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'email' => $model->email,
+        ];
+    }
+    
+    // To allow inclussion of posts
+    public function posts($model)
+	{
+		return $this->items($model, PostTransformer::class);
+	}
+}
+```
+In this example, we've added a filtering for `Post` model and that's why a user can select the related posts with users from the `URL`, for example: `http://example.com/users?fields=posts`. without the `posts` method in `UserTransformer` a user can't read/fetch the posts relation.
