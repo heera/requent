@@ -83,6 +83,8 @@ We've seen `get` method earlier which just returns an array of users which is:
 return Requent::resource(User::class)->get();
 ```
 
+#### paginated result
+
 At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL`: `http://example.com/users?fields=posts{comments}&paginate`, that's it. Also, we can set the paginator, for example: `http://example.com/users?fields=posts{comments}&paginate=simple`, this will return the paginated result using Laravel's `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
 
 #### Per Page
