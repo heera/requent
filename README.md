@@ -339,3 +339,5 @@ class Post extends Model
 }
 
 ```
+
+According to the setup given above, we can make a request using the following `URL` to get all the users with posts and it's related comments and user: `http://example.com/users?fields=posts{user,comments}`.
