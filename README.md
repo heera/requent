@@ -424,6 +424,14 @@ http://example.com/1?fields=posts.orderBy(title).limit(3){user,comments.orderByD
 
 ## <a name="customizations"></a> Customizations
 
+Requent uses some base settings from a config file. By default, it'll work as it's configured but if you need to modify any of the settings then you can publish the config file from vendor to your local app config directory. To publish the config, just execute the following command from your terminal:
+
+```
+php artisan vendor:publish --provider="Requent\RequentServiceProvider" --tag="config"
+```
+
+Once you publish the config file to your local `/config` directory then you can modify any settings to customize `Requent` for your need. Follwing code is taken from the config file which is documented itself.
+
 ```
 /*
     |--------------------------------------------------------------------------
