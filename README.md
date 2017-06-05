@@ -8,7 +8,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 4. [Resource](#resource)
 5. [Methods](#methods)
 6. [Resource Key By](#key-by)
-7. [Data Filtering (Transformers)](#transformer)
+7. [Data Filtering Using Transformers](#transformer)
 
 ## <a name="installation">Installation
 
@@ -195,7 +195,7 @@ public function fetch($id = null)
 
 The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` as key.
 
-## <a name="transformer"> Data Filtering (Transformers)
+## <a name="transformer"> Data Filtering Using Transformers
 
 >The idea of transformers is taken from [Fractal Transformer](http://fractal.thephpleague.com/transformers/) package. This looks like re-inventing the wheel but actually it's not. The main intention for building the `Requent` package was to allow an easy to use interface for fetching resource/data form a web application (non-public `API`), which allows to read data from server using any `javaScript` framework/library even without defining any transformers. Also, the `Eloquent` query is built dynamically on the run-time to load everything eagerly, while `Fractal` uses lazy loading. So, the `Requent` couldn't utilize the data transforming feature that `Fractal` offers. So, to provide the data filtering layer (for public `API`), the `Requent` needed it's own data filtering mechanism but the `Fractal` package is great and I've used it exclusively on my projects.
 
