@@ -369,11 +369,23 @@ In this case, because of `raw`, the requent will execute the query to load the r
 ### Transform Raw Result
 
 ```php
-public function fetch($id = null)
+
+use Requent;
+use App\User;
+use App\Http\Controllers\Controller;
+use Requent\Transformer\TransformerHelper;
+use App\Http\Transformers\UserTransformer;
+
+class HomeController extends Controller
 {
-    $result = Requent::resource(User::class)->raw()->get();
+    use TransformerHelper;
     
-    return $this->transform($result, UserTransformer::class, 'users');
+    public function fetch($id = null)
+    {
+        $result = Requent::resource(User::class)->raw()->get();
+    
+        return $this->transform($result, UserTransformer::class, 'users');
+    }
 }
 ```
 
