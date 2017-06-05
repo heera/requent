@@ -123,6 +123,37 @@ For the first item we can call the `first` method:
 Requent::resource(User::class)->first();
 ```
 
+#### Fetch
 
-Now, thiese are all the basic things. 
+These are all the available methods for executing query but there is one more method which is `fetch`. This method can return any kind of result, an collection (array), paginated result or a singlr resource. Let's see an example:
 
+```php
+
+// In Controller
+
+public function fetch($id = null)
+{
+    return Requent::resource(User::class)->fetch($id);
+}
+```
+To use this method we need a route like: `Route::get('users/{id?}', 'UserController@fetch')` and then we can use this single route to get all kind of results, for example:
+
+#### Get a collection of users (Array)
+
+```php
+http://example.com/users?fields=posts{comments}`
+```
+
+#### Get paginated result
+
+```php
+http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+```
+
+#### Get a single user (Array)
+
+```php
+http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+```
+
+This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
