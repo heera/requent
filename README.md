@@ -113,7 +113,7 @@ return Requent::resource(User::class)->paginate(); // or paginate(10)
 
 #### Simple Paginate
 
-The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More](https://laravel.com/docs/5.4/pagination).
+The `simplePaginate` will return paginated result using `Simple Paginator`. [Check Laravel Documentation](https://laravel.com/docs/5.4/pagination).
 
 ```php
 return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
@@ -124,7 +124,7 @@ return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10
 If we want to retrieve a single `user` then we can use `find` and `first` method, for example:
 
 ```php
-Requent::resource(User::class)->find($id);
+return Requent::resource(User::class)->find($id);
 ```
 
 #### First
@@ -132,7 +132,7 @@ Requent::resource(User::class)->find($id);
 For the first item we can call the `first` method:
 
 ```php
-Requent::resource(User::class)->first();
+return Requent::resource(User::class)->first();
 ```
 
 #### Fetch
@@ -168,7 +168,7 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 ```
 
-This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
+This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
 ### <a name="key-by"> Resource Key By
 
