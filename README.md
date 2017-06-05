@@ -327,12 +327,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-public function comments()
+    public function comments()
     {
         return $this->hasMany(Comment::class);
     }
