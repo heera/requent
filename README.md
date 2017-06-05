@@ -9,6 +9,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 5. [Methods](#methods)
 6. [Resource Key By](#key-by)
 7. [Data Filtering Using Transformers](#transformer)
+8. [Query Constraints](#query-constraints)
 
 ## <a name="installation">Installation
 
@@ -248,7 +249,7 @@ return Requent::resource(User::class)->transformBy(new UserTransformer)->fetch($
 
 This will transform the resource using by calling the `transform` method defined in the transformer class you created. In this case, the transform mathod will called to transform the `User` model but right now, it'll not load any relations. Which means, if the `URL` is something like: `http://example.com/users?fields=posts{comments}` then only the `User` model will be transformed and the result would be something like the following:
 
-<pre>
+```
 [
     {
         id: 1,
@@ -262,7 +263,8 @@ This will transform the resource using by calling the `transform` method defined
     }
     // ...
 ]
-</pre>
+```
+
 To load any relations from the root transformer (`UserTransformer` in this case), we also need to explicitly declare a method using the same name the relation is defined in the model, so for example to load the related posts with each `User`  model we need to declare a `posts` method in our `UserTransformer` class. For example:
 
 ```php
@@ -349,3 +351,5 @@ In the `PostTransformer` class we've used `item` method inside `user` method, wh
 So, it's obvious that, to allow the inclussion of any relation from a resource we've to declare a method for that relation using the same name we've used to declare the relation in the `Eloquent` model and relations will be included only if the user selects/includes it within the `fields` parameter. If user selects a relation from a resource that is not exposed throught the transformer using a method, then it'll not be available in the response.
 
 > The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
+
+## <a name="query-constraints"> Query Constraints
