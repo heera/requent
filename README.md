@@ -113,7 +113,7 @@ return Requent::resource(User::class)->paginate(); // or paginate(10)
 
 #### Simple Paginate
 
-The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More].(https://laravel.com/docs/5.4/pagination)
+The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More](https://laravel.com/docs/5.4/pagination).
 
 ```php
 return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
