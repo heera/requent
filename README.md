@@ -311,3 +311,5 @@ class PostTransformer extends Transformer
     }
 }
 ```
+
+In this example, we've implemented the `transform` method for the `Post` model for response filtering so only the `id`, `title` and `body` column will be available for the `Post` model in the response and the related posts will be included only if the user selects the posts through the query string parameter in the `URL`.
