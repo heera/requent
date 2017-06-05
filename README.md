@@ -319,7 +319,7 @@ In this example, we've implemented the `transform` method for the `Post` model f
 In the exmple given above, we've also defined two additional methods, `user` and `comments`. Those methods are also relations of `Post` model. The `user` method is defined as a `belongsTo` relationship which simply maps the related user who published the post and the comments method loads the related comments published under the post. The `Post` model looks something like the followin:
 
 ```php
-namespace App\Models;
+namespace App;
 
 use App\User;
 use App\Comment;
