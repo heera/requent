@@ -209,3 +209,23 @@ class UserTransformer extends Transformer
     }
 }
 ```
+
+To use your custom transformer, all you need to pass the transformer class to the `resource` method, i.e:
+
+```php
+return Requent::resource(User::class, UserTransformer::class)->fetch($id);
+```
+
+Also you can pass the class instance:
+
+```php
+return Requent::resource(User::class, new UserTransformer)->fetch($id);
+```
+
+Also, you can set the transformer using `transformBy` method:
+
+```php
+return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id); // or new UserTransformer
+```
+
+This will transform the resource using by calling the `transform` method defined in the transformer class you created.
