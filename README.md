@@ -296,9 +296,9 @@ class PostTransformer extends Transformer
     public function transform($model)
     {
         return [
-            'id' => $model->id,
-            'title' => $model->title,
-            'body' => $model->body,
+            'post_id' => $model->id,
+            'post_title' => $model->title,
+            'post_body' => $model->body,
         ];
     }
 
@@ -347,3 +347,5 @@ According to the setup given above, we can make a request using the following `U
 In the `PostTransformer` class we've used `item` method inside `user` method, which actually resieves a single `Eloquent` model in `$model` parameter and so we've called the `item` method from the transformer. In the comments method, we've used the `items` method because the `$collection` parameter in comments method recieves a collection of `Comment` models.
 
 So, it's obvious that, to allow the inclussion of any relation from a resource we've to declare a method for that relation using the same name we've used to declare the relation in the `Eloquent` model and relations will be included only if the user selects/includes it within the `fields` parameter. If user selects a relation from a resource that is not exposed throught the transformer using a method, then it'll not be available in the response.
+
+> The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
