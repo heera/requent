@@ -1,4 +1,4 @@
-# Requent [![Build Status](https://travis-ci.org/heera/requent.svg?branch=master)](https://travis-ci.org/heera/requent) [![Latest Stable Version](https://poser.pugx.org/sheikhheera/requent/v/stable)](https://packagist.org/packages/sheikhheera/requent) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/heera/requent/master/LICENSE)
+# Requent [![Build Status](https://travis-ci.org/heera/requent.svg?branch=master)](https://travis-ci.org/heera/requent) [![Latest Stable Version](https://poser.pugx.org/sheikhheera/requent/v/stable)](https://packagist.org/packages/sheikhheera/requent) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/heera/requent/blob/master/LICENSE)
 
 An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent with zero configuration. It maps a request to eloquent query and transforms the result based on query parameters. It also supports to transform the query result explicitly using user defined transformers which provides a more secured way to exchange data from a public API with minimal effort.
 
