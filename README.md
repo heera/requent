@@ -315,3 +315,27 @@ class PostTransformer extends Transformer
 ```
 
 In this example, we've implemented the `transform` method for the `Post` model for response filtering so only the `id`, `title` and `body` column will be available for the `Post` model in the response and the related posts will be included only if the user selects the posts through the query string parameter in the `URL`.
+
+In the exmple given above, we've also defined two additional methods, `user` and `comments`. Those methods are also relations of `Post` model. The `user` method is defined as a `belongsTo` relationship which simply maps the related user who published the post and the comments method loads the related comments published under the post. The `Post` model looks something like the followin:
+
+```php
+namespace App\Models;
+
+use App\User;
+use App\Comment;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+}
+
+```
