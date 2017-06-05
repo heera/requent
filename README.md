@@ -9,8 +9,9 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 5. [Methods](#methods)
 6. [Resource Key By](#key-by)
 7. [Data Filtering Using Transformers](#transformer)
-8. [Query Constraints](#query-constraints)
-9. [Customizations](#customizations)
+8. [Get Raw Result](#raw)
+9. [Query Constraints](#query-constraints)
+10. [Customizations](#customizations)
 
 ## <a name="installation">Installation
 
@@ -167,7 +168,7 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 #### Get a single user (Array)
 
 ```php
-http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
 ```
 
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
@@ -352,6 +353,19 @@ In the `PostTransformer` class we've used `item` method inside `user` method, wh
 So, it's obvious that, to allow the inclussion of any relation from a resource we've to declare a method for that relation using the same name we've used to declare the relation in the `Eloquent` model and relations will be included only if the user selects/includes it within the `fields` parameter. If user selects a relation from a resource that is not exposed throught the transformer using a method, then it'll not be available in the response.
 
 > The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
+
+## <a name="raw"> Get Raw Result
+
+Requent has a `raw` method which could be useful if someone doesn't want to apply any transformation, because after the transformation, the returned data is an array. So if you want to execute the query but you want to ommit the data transformation by default (selection of columns through the query string) then you can use `raw` method, for example:
+
+```php
+$result = Requent::resource(User::class)->raw()->fetch($id);
+```
+
+In this case, when you don't provide a custom transformer to transform data then the requent will transform the data using the defalt transformer. So, if you make a request using `http://example.com/users?fields=email,posts{title}`, then it should return only `email` from the `User` model and `title` from the `Post` model. 
+
+In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent`.
+
 
 ## <a name="query-constraints"> Query Constraints
 
