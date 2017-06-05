@@ -277,9 +277,37 @@ class UserTransformer extends Transformer
     
     // To allow inclussion of posts
     public function posts($model)
-	{
-		return $this->items($model, PostTransformer::class);
-	}
+    {
+        return $this->items($model, PostTransformer::class);
+    }
 }
 ```
-In this example, we've added a filtering for `Post` model and that's why a user can select the related posts with users from the `URL`, for example: `http://example.com/users?fields=posts`. without the `posts` method in `UserTransformer` a user can't read/fetch the posts relation.
+In this example, we've added a filtering for `Post` model and that's why a user can select the related posts with users from the `URL`, for example: `http://example.com/users?fields=posts`. without the `posts` method in `UserTransformer` a user can't read/fetch the posts relation. At this point, we are not done yet. As you can assume that, we are transforming the posts (Collection) using `items` method available in `UserTransformer` (extended from abstract Transform class) and passing another transformer (PostTransformer) to transform the collection of posts. So, we need to implement the `PostTransformer` and have to implement the `transform` method where we'll explicitly return the transformed array for each `Post` model, for example:
+
+```php
+namespace App\Http\Transformers;
+
+use Requent\Transformer\Transformer;
+
+class PostTransformer extends Transformer
+{
+    public function transform($model)
+    {
+        return [
+            'id' => $model->id,
+            'title' => $model->title,
+            'body' => $model->body,
+        ];
+    }
+
+    public function user($model)
+    {
+        return $this->item($model, new UserTransformer);
+    }
+
+    public function comments($model)
+    {
+        return $this->items($model, new CommentTransformer);
+    }
+}
+```
