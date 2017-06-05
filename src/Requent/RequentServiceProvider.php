@@ -9,7 +9,7 @@ class RequentServiceProvider extends ServiceProvider
 {
 	public function register()
 	{
-		// ...
+		$this->mergeConfigFrom( __DIR__.'/Config/requent.php', 'requent');
 	}
 
 	public function boot()
@@ -19,8 +19,6 @@ class RequentServiceProvider extends ServiceProvider
 		$this->app->instance('requent', $requent);
 		
 		$this->app->instance(Requent::class, $requent);
-
-		$this->mergeConfigFrom( __DIR__.'/Config/requent.php', 'requent');
 
 		$this->publishes([
 	        __DIR__.'/Config/requent.php' => config_path('requent.php'),
