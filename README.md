@@ -364,8 +364,22 @@ $result = Requent::resource(User::class)->raw()->fetch($id);
 
 In this case, when you don't provide a custom transformer to transform data then the requent will transform the data using the defalt transformer. So, if you make a request using `http://example.com/users?fields=email,posts{title}`, then it should return only `email` from the `User` model and `title` from the `Post` model. 
 
-In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent`.
+In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent` query.
 
+### Transforming Raw Result
+
+```php
+public function fetch($id = null)
+{
+    $result = Requent::resource(User::class)->raw()->fetch($id);
+    
+	return $this->transform(
+	   	$result,
+	   	UserTransformer::class,
+	   	$id ? 'user' : 'users'
+	);
+}
+```
 
 ## <a name="query-constraints"> Query Constraints
 
