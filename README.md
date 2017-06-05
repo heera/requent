@@ -309,9 +309,9 @@ class PostTransformer extends Transformer
     }
 
     // User can select related comments for each Post model
-    public function comments($model)
+    public function comments($collection)
     {
-        return $this->items($model, new CommentTransformer);
+        return $this->items($collection, new CommentTransformer);
     }
 }
 ```
@@ -343,3 +343,5 @@ class Post extends Model
 ```
 
 According to the setup given above, we can make a request using the following `URL` to get all the users with posts and it's related comments and user: `http://example.com/users?fields=posts{user,comments}`.
+
+In the `PostTransformer` class we've used `item` method inside `user` method, which actually resieves a single `Eloquent` model in `$model` parameter and so we've called the `item` method from the transformer. In the comments method, we've used the `items` method because the `$collection` parameter in comments method recieves a collection of `Comment` models.
