@@ -199,14 +199,13 @@ use Requent\Transformer\Transformer;
 
 class UserTransformer extends Transformer
 {
-	public function transform($model)
-	{
-		// return $model;
-		return [
-			'id' => $model->id,
-			'name' => $model->name,
-			'email' => $model->email,
-		];
-	}
+    public function transform($model)
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'email' => $model->email,
+        ];
+    }
 }
 ```
