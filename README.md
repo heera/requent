@@ -75,7 +75,7 @@ So, we can call any scope methods as well, which just returns a `Query Builder` 
 
 ## <a name="methods"> Methods
 
-#### get
+#### Get
 
 We've seen `get` method earlier which just returns an array of users which is:
 
@@ -83,13 +83,29 @@ We've seen `get` method earlier which just returns an array of users which is:
 return Requent::resource(User::class)->get();
 ```
 
-#### paginated result
+#### Paginated Result
 
 At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL`: `http://example.com/users?fields=posts{comments}&paginate`, that's it. Also, we can set the paginator, for example: `http://example.com/users?fields=posts{comments}&paginate=simple`, this will return the paginated result using Laravel's `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
 
 #### Per Page
 
 We can also tell how many pages we want to get for per page and it's just another parameter, for example: `http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`. If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
+
+#### Paginate
+Also, we can call the `paginate` method on the `Requent` directly, for example:
+
+```php
+return Requent::resource(User::class)->paginate(); // or paginate(10)
+```
+
+
+#### Simple Paginate
+
+The `simplePaginate` will return paginated result usin `Simple Paginator` (Check Laravel Docs)
+
+```php
+return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
+```
 
 #### Find
 
@@ -99,7 +115,7 @@ If we want to retrieve a single `user` then we can use `find` and `first` method
 Requent::resource(User::class)->find($id);
 ```
 
-#### Find
+#### First
 
 For the first item we can call the `first` method:
 
