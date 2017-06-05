@@ -380,7 +380,7 @@ class HomeController extends Controller
 {
     use TransformerHelper;
     
-    public function fetch($id = null)
+    public function index()
     {
         $result = Requent::resource(User::class)->raw()->get();
     
