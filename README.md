@@ -300,11 +300,13 @@ class PostTransformer extends Transformer
         ];
     }
 
+    // User can select related user for each Post model
     public function user($model)
     {
         return $this->item($model, new UserTransformer);
     }
 
+    // User can select related comments for each Post model
     public function comments($model)
     {
         return $this->items($model, new CommentTransformer);
