@@ -225,7 +225,29 @@ return Requent::resource(User::class, new UserTransformer)->fetch($id);
 Also, you can set the transformer using `transformBy` method:
 
 ```php
-return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id); // or new UserTransformer
+return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id);
+```
+Also, the `transformBy` method accepts a transformer object instance:
+
+```php
+return Requent::resource(User::class)->transformBy(new UserTransformer)->fetch($id);
 ```
 
-This will transform the resource using by calling the `transform` method defined in the transformer class you created.
+This will transform the resource using by calling the `transform` method defined in the transformer class you created. In this case, the transform mathod will called to transform the `User` model but right now, it'll not load any relations. Which means, if the `URL` is something like: `http://example.com/users?fields=posts{comments}}` then only the `User` model will be transformed and the result would be something like the following:
+
+<pre>
+[
+    {
+        id: 1,
+        name: "Aurelio Graham",
+        email: "hharvey@example.org"
+    },
+    {
+        id: 2,
+        name: "Adolfo Weissnat",
+        email: "serena78@example.com",
+    }
+    // ...
+]
+</pre>
+To load any relations from the root transformer (`UserTransformer` in this case), we also need to explicitly declare a method using the same name the relation is defined in the model, so for example to load the related posts with each `User`  model we need to declare a `posts` method in our `UserTransformer` class.
