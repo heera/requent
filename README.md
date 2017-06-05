@@ -13,7 +13,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 9. [Query Constraints](#query-constraints)
 10. [Customizations](#customizations)
 
-## <a name="installation">Installation
+## <a name="installation"></a> Installation
 
 Add the following line in your "composer.json" file within "require" section and run `composer install` from terminal:
 
@@ -21,11 +21,11 @@ Add the following line in your "composer.json" file within "require" section and
 
 This will install the package and once the installation is finished then you can start using it without any configurations but you can configure it for your need.
 
-## <a name="how-it-works">How It Works
+## <a name="how-it-works"></a> How It Works
 
 This package will allow us to query resources through the request query string parameter. For example, if we've a `User` model and the `User` model has many posts (`Post` model) and each post has many comments (`Comment` model) then we can query the users with their posts and comments of each posts by sending a request like the followig: `http://example.com/users?fields=posts{comments}`. This is the most basic use case but it offers more. We can also select properties of each model through query string, for example, if we want to select only the emal field from the `User` model and title from `Post` and body from the `Comment` model then we can just do it by sending a request like the following: `http://example.com/users?fields=email,posts{title,comments{body}}`.
 
-## <a name="basic-example">Basic Example
+## <a name="basic-example"></a> Basic Example
 
 To use this package, we need to create some resources (Eloquent Models). For this demonstration, we'll use the same idea using User, Post and Comment models for an imaginary blog. The User model has a `hasMany` relation for posts and the Post model has a `hasMany` relation for comments. So, we need a route, which could be a resourceful route but we'll use an explicite route declaration here:
 
@@ -56,7 +56,7 @@ Now, we can make a request using: `http://example.com/users?fields=email,posts{t
 
 If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it's features.
 
-## <a name="resource"> Resource
+## <a name="resource"></a> Resource
 Actually, a resource is just an eloquent model, the first method we should call on the `Requent` class is `resource` which sets the primary resource we want to query on. So we can set the resource using couple of ways, for example:
 
 ```php
@@ -88,7 +88,7 @@ $result = Requent::resource(
 
 We'll walk-through all the available methods and features that `Requent` offers. Let's continue.
 
-## <a name="methods"> Methods
+## <a name="methods"></a> Methods
 
 #### Get
 
@@ -173,7 +173,7 @@ http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
 
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
-### <a name="key-by"> Resource Key By
+## <a name="key-by"></a> Resource Key By
 
 The query results for a collection is simply an array with a zero based index but if we want then we can wrap our collection in a key using `keyBy` method, for example:
 
@@ -198,7 +198,7 @@ public function fetch($id = null)
 
 The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` as key.
 
-## <a name="transformer"> Data Filtering Using Transformers
+## <a name="transformer"></a> Data Filtering Using Transformers
 
 >The idea of transformers is taken from [Fractal Transformer](http://fractal.thephpleague.com/transformers/) package. This looks like re-inventing the wheel but actually it's not. The main intention for building the `Requent` package was to allow an easy to use interface for fetching resource/data form a web application (non-public `API`), which allows to read data from server using any `javaScript` framework/library even without defining any transformers. Also, the `Eloquent` query is built dynamically on the run-time to load everything eagerly, while `Fractal` uses lazy loading. So, the `Requent` couldn't utilize the data transforming feature that `Fractal` offers. So, to provide the data filtering layer (for public `API`), the `Requent` needed it's own data filtering mechanism but the `Fractal` package is great and I've used it exclusively on my projects.
 
@@ -354,7 +354,7 @@ So, it's obvious that, to allow the inclussion of any relation from a resource w
 
 > The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
 
-## <a name="raw"> Get Raw Result
+## <a name="raw"></a> Get Raw Result
 
 Requent has a `raw` method which could be useful if someone doesn't want to apply any transformation, because after the transformation, the returned data is an array. So if you want to execute the query but you want to ommit the data transformation by default (selection of columns through the query string) then you can use `raw` method, for example:
 
@@ -366,7 +366,7 @@ In this case, when you don't provide a custom transformer to transform data then
 
 In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent` query.
 
-### Transform Raw Result
+#### Transform Raw Result
 
 ```php
 
@@ -389,10 +389,10 @@ class HomeController extends Controller
 }
 ```
 
-## <a name="query-constraints"> Query Constraints
+## <a name="query-constraints"></a> Query Constraints
 
 // TODO:
 
-## <a name="customizations"> Customizations
+## <a name="customizations"></a> Customizations
 
 // TODO:
