@@ -30,7 +30,7 @@ To use this package, we need to create some resources (Eloquent Models). For thi
 Route::get('users', 'UserController@index');
 ```
 
-Now, we need a controller which is just a simple controller, i.e:
+Now, we need a controller which is just a simple controller, for example:
 
 ```php
 <?php
@@ -57,19 +57,19 @@ If we want to load any resource with relations without selecting any properties 
 Actually, a resource is just an eloquent model, the first method we should call on the `Requent` class is `resource` which sets the primary resource we want to query on. So we can set the resource using couple of ways, for example:
 
 ```php
-Requent::resource(User::class)
+$resource = Requent::resource(User::class);
 ```
 
-Also, we can use an object, i.e:
+Also, we can use an object, for example:
 
 ```php
-Requent::resource(new User)
+$resource = Requent::resource(new User);
 ```
 
 We can also pass a `Query Builder` for example:
 
 ```php
-Requent::resource(app(User::class)->where('role', 'admin'))
+$resource = Requent::resource(app(User::class)->where('role', 'admin'));
 ```
 
 So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods of `Requent`).
