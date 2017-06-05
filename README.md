@@ -10,7 +10,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 6. [Resource Key By](#key-by)
 7. [Data Filtering Using Transformers](#transformer)
 8. [Get Raw Result](#raw)
-9. [Query Constraints](#query-constraints)
+9. [Query Modifier Clause](#query-clause)
 10. [Customizations](#customizations)
 
 ## <a name="installation"></a> Installation
@@ -389,10 +389,119 @@ class HomeController extends Controller
 }
 ```
 
-## <a name="query-constraints"></a> Query Constraints
+## <a name="query-clause"></a> Query Modifier Clause
 
-// TODO:
+When we make a request, we can add some query modifier clauses for example, `orderBy`, `orderByDesc` e.t.c. There are several clauses that `Requent` offers to use in the `URL`, those are given below:
+
+#### orderBy
+
+```
+http://blog54.dev/1?fields=posts{user,comments.orderBy(id){user}}
+```
+
+#### orderByDesc
+
+```
+http://example.com/1?fields=posts{user,comments.orderByDesc(id){user}}
+```
+
+#### skip & take
+
+```
+http://example.com/1?fields=posts{user,comments.skip(2).take(1){user}}
+```
+
+#### offset & limit
+
+```
+http://example.com/1?fields=posts{user,comments.offset(2).limit(1){user}}
+```
+#### Multiple Clauses
+
+```
+http://example.com/1?fields=posts.orderBy(title).limit(3){user,comments.orderByDesc(id).skip(2).take(1){user}}
+```
 
 ## <a name="customizations"></a> Customizations
 
-// TODO:
+Requent uses some base settings from a config file. By default, it'll work as it's configured but if you need to modify any of the settings then you can publish the config file from vendor to your local app config directory. To publish the config, just execute the following command from your terminal:
+
+```
+php artisan vendor:publish --provider="Requent\RequentServiceProvider" --tag="config"
+```
+
+Once you publish the config file to your local `/config` directory then you can modify any settings to customize `Requent` for your need. Follwing code is taken from the config file which is documented itself.
+
+```
+/*
+    |--------------------------------------------------------------------------
+    | Query Parameter Name
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the parameter name to pass your query string
+    | to select fields/columns. By default, "fields" is set but you may
+    | override it if you wish.
+    |
+    */
+    'query_identifier' => 'fields',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Search Parameter Name
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the parameter name for searching anything. 
+    | By default, "search" is set but you may override it if you wish.
+    |
+    */
+    'search_identifier' => 'search',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paginator Identifier
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the parameter name to get paginated data.
+    | By default, "paginate" is set but you may override it if you wish.
+    |
+    */
+    'paginator_identifier' => 'paginate',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Paginator
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the default paginator to be used when geting paginated
+    | result. By default, the length aware paginator will be used unless you override
+    | it here or pass the pagination type in the query string.
+    |
+    | Available Options: "simple", "default"
+    |
+    */
+    'default_paginator' => 'default',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Per Page Identifier
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the name of the query string to pass the number
+    | of pages you want to retrieve from paginated result. By default, the
+    | package will use "per_page" so you can pass ?per_page=10 to get 10 items
+    |  per page unless you override it here.
+    */
+    'per_page_identifier' => 'per_page',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Attributes Selection
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define whether you would like to load all properties/attributes
+    | from a model if no property was explicitly selected using the query string. If
+    | you just select relations of a model, the package will load all the attributes
+    | by default unless you override it here by setting the value to false.
+    */
+    'select_default_attributes' => true,
+```
