@@ -75,6 +75,8 @@ So, we can call any scope methods as well, which just returns a `Query Builder` 
 
 ## <a name="methods"> Methods
 
+#### get
+
 We've seen `get` method earlier which just returns an array of users which is:
 
 ```php
@@ -87,13 +89,15 @@ At this point, we'll get an array but we can retrieve paginated result using sam
 
 We can also tell how many pages we want to get for per page and it's just another parameter, for example: `http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`. If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
 
-#### Retrive Single Object
+#### Find
 
 If we want to retrieve a single `user` then we can use `find` and `first` method, for example:
 
 ```php
 Requent::resource(User::class)->find($id);
 ```
+
+#### Find
 
 For the first item we can call the `first` method:
 
