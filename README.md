@@ -3,8 +3,10 @@
 An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent with zero configuration. It maps a request to eloquent query and transforms the result based on query parameters. It also supports to transform the query result explicitly using user defined transformers which provides a more secured way to exchange data from a public API with minimal effort.
 
 1. [Installation](#installation)
-2. [The Use Case](#how-it-works)
+2. [How It Works](#how-it-works)
 3. [Basic Example](#basic-example)
+4. [Resource](#resource)
+5. [Methods](#methods)
 
 
 ## <a name="installation">Installation
@@ -46,4 +48,59 @@ class UserController extends Controller
     }
 }
 ```
-Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result.
+Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email property) with all the related posts (only title property) and all the comments of each post (only body propert).
+
+If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it more.
+
+## <a name="resource"> Resource
+Actually, a resource is just an eloquent model, the first method we should call on the `Requent` class is `resource` which sets the primary resource we want to query on. So we can set the resource using couple of ways, for example:
+
+```php
+Requent::resource(User::class)
+```
+
+Also, we can use an object, i.e:
+
+```php
+Requent::resource(new User)
+```
+
+We can also pass a `Query Builder` for example:
+
+```php
+Requent::resource(app(User::class)->where('role', 'admin'))
+```
+
+So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods of `Requent`).
+
+## <a name="methods"> Methods
+
+We've seen `get` method earlier which just returns an array of users which is:
+
+```php
+return Requent::resource(User::class)->get();
+```
+
+At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL`: `http://example.com/users?fields=posts{comments}&paginate`, that's it. Also, we can set the paginator, for example: `http://example.com/users?fields=posts{comments}&paginate=simple`, this will return the paginated result using Laravel's `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
+
+#### Per Page
+
+We can also tell how many pages we want to get for per page and it's just another parameter, for example: `http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`. If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
+
+#### Retrive Single Object
+
+If we want to retrieve a single `user` then we can use `find` and `first` method, for example:
+
+```php
+Requent::resource(User::class)->find($id);
+```
+
+For the first item we can call the `first` method:
+
+```php
+Requent::resource(User::class)->first();
+```
+
+
+Now, thiese are all the basic things. 
+
