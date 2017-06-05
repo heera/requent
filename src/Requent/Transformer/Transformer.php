@@ -24,9 +24,8 @@ abstract class Transformer extends BaseTransformer
      */
     public function transformPaginatedItems($result, $transformer)
     {
-        $transformer = $this->resolveTransformer($transformer);
         $result->getCollection()->transform(function ($model) use ($transformer) {
-            return $this->transformItem($model, $transformer);
+            return $this->transformItem($model, $this->make($transformer));
         });
         return $result->toArray();
     }
@@ -40,9 +39,8 @@ abstract class Transformer extends BaseTransformer
      */
     public function transformItems($result, $transformer)
     {
-        $transformer = $this->resolveTransformer($transformer);
         $result->transform(function ($model) use ($transformer) {
-            return $this->transformItem($model, $transformer);
+            return $this->transformItem($model, $this->make($transformer));
         });
         return $result->toArray();
     }
@@ -56,10 +54,11 @@ abstract class Transformer extends BaseTransformer
      */
     public function transformItem($model, $transformer)
     {
-        $transformer = $this->resolveTransformer($transformer);
         if(!$model || is_array($model)) return $model;
         $transformed = $transformer->transform($model);
-        return $this->transformRelations($model, $transformer, $transformed);
+        return $this->transformRelations(
+            $model, $this->make($transformer), $transformed
+        );
     }
 
     /**
@@ -98,7 +97,7 @@ abstract class Transformer extends BaseTransformer
      * @param  String $transformer
      * @return $this
      */
-    protected function resolveTransformer($transformer)
+    protected function make($transformer)
     {
         return is_string($transformer) ? new $transformer : $transformer;
     }
