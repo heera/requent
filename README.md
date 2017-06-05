@@ -72,7 +72,18 @@ We can also pass a `Query Builder` for example:
 $resource = Requent::resource(app(User::class)->where('role', 'admin'));
 ```
 
-So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods of `Requent`).
+So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods in `Requent`), for example:
+
+```php
+$result = Requent::resource(
+    app(User::class)->where('role', 'admin')
+)
+->transformUsing(UserTransformer::class)
+->keyBy('users')
+->find($id);
+```
+
+We'll walkthrough all the available methods and features that `Requent` offers. Let's continue.
 
 ## <a name="methods"> Methods
 
