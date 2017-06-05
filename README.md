@@ -10,7 +10,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 6. [Resource Key By](#key-by)
 7. [Data Filtering Using Transformers](#transformer)
 8. [Get Raw Result](#raw)
-9. [Query Constraints](#query-constraints)
+9. [Query Modifier Clause](#query-clause)
 10. [Customizations](#customizations)
 
 ## <a name="installation"></a> Installation
@@ -389,9 +389,33 @@ class HomeController extends Controller
 }
 ```
 
-## <a name="query-constraints"></a> Query Constraints
+## <a name="query-clause"></a> Query Modifier Clause
 
-// TODO:
+When we make a request, we can add some query modifier clauses for example, `orderBy`, `orderByDesc` e.t.c. There are several clauses that `Requent` offers to use in the `URL`, those are given below:
+
+#### orderBy
+
+```
+http://blog54.dev/1?fields=posts{user,comments.orderBy(id){user}}
+```
+
+#### orderByDesc
+
+```
+http://blog54.dev/1?fields=posts{user,comments.orderByDesc(id){user}}
+```
+
+#### skip & take
+
+```
+http://blog54.dev/1?fields=posts{user,comments.skip(2).take(1){user}}
+```
+
+#### offset & limit
+
+```
+http://blog54.dev/1?fields=posts{user,comments.offset(2).limit(1){user}}
+```
 
 ## <a name="customizations"></a> Customizations
 
