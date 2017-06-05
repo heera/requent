@@ -159,3 +159,26 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
 ### <a name="key-by"> Resource Key By
+
+The query results for a collection is simply an array with a zero based index but if we want then we can wrap our collection in a key using `keyBy` method, for example:
+
+```php
+return Requent::resource(User::class)->keyBy('users')->get();
+```
+
+This will return a collection of users (Array) as a key value pair where the key will be `users` and the result will be the valuse of that key. We can also use a key for a single user for example:
+
+```php
+return Requent::resource(User::class)->keyBy('user')->find(1);
+```
+
+In case of `fetch` we can use something like the following:
+
+```php
+public function fetch($id = null)
+{
+    return Requent::resource(User::class)->keyBy($id ? 'user' : 'users')->fetch($id);
+}
+```
+
+The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` key.
