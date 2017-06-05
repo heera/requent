@@ -8,6 +8,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 4. [Resource](#resource)
 5. [Methods](#methods)
 6. [Resource Key By](#key-by)
+7. [Data Filtering (Transformers)](#transformer)
 
 ## <a name="installation">Installation
 
@@ -183,6 +184,6 @@ public function fetch($id = null)
 
 The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` as key.
 
-## <a name="trnsformer"> Data Transformation
+## <a name="trnsformer"> Data Filtering (Transformers)
 
 So far we've seen the default data transformation, which means that, a user can get any property or available relations of the resource just by asking it through the query string parameter `fields` (we can use something else other than `fields`), but there is no way to keep some data private if you are using this for a public `API`. Here, the `transformer` comes into play.
