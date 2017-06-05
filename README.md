@@ -10,6 +10,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 6. [Resource Key By](#key-by)
 7. [Data Filtering Using Transformers](#transformer)
 8. [Query Constraints](#query-constraints)
+9. [Customizations](#customizations)
 
 ## <a name="installation">Installation
 
@@ -353,3 +354,9 @@ So, it's obvious that, to allow the inclussion of any relation from a resource w
 > The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
 
 ## <a name="query-constraints"> Query Constraints
+
+// TODO:
+
+## <a name="customizations"> Customizations
+
+// TODO:
