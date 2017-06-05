@@ -7,7 +7,7 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 3. [Basic Example](#basic-example)
 4. [Resource](#resource)
 5. [Methods](#methods)
-
+6. [Resource Key By](#key-by)
 
 ## <a name="installation">Installation
 
@@ -101,7 +101,7 @@ return Requent::resource(User::class)->paginate(); // or paginate(10)
 
 #### Simple Paginate
 
-The `simplePaginate` will return paginated result usin `Simple Paginator` [Check Laravel Pagination](https://laravel.com/docs/5.4/pagination)
+The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More].(https://laravel.com/docs/5.4/pagination)
 
 ```php
 return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
@@ -157,3 +157,5 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 ```
 
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
+
+### <a name="key-by"> Resource Key By
