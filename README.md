@@ -402,19 +402,24 @@ http://blog54.dev/1?fields=posts{user,comments.orderBy(id){user}}
 #### orderByDesc
 
 ```
-http://blog54.dev/1?fields=posts{user,comments.orderByDesc(id){user}}
+http://example.com/1?fields=posts{user,comments.orderByDesc(id){user}}
 ```
 
 #### skip & take
 
 ```
-http://blog54.dev/1?fields=posts{user,comments.skip(2).take(1){user}}
+http://example.com/1?fields=posts{user,comments.skip(2).take(1){user}}
 ```
 
 #### offset & limit
 
 ```
-http://blog54.dev/1?fields=posts{user,comments.offset(2).limit(1){user}}
+http://example.com/1?fields=posts{user,comments.offset(2).limit(1){user}}
+```
+#### Multiple Clauses
+
+```
+http://example.com/1?fields=posts.orderBy(title).limit(3){user,comments.orderByDesc(id).skip(2).take(1){user}}
 ```
 
 ## <a name="customizations"></a> Customizations
