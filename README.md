@@ -1,10 +1,14 @@
 # Requent [![Build Status](https://travis-ci.org/heera/requent.svg?branch=master)](https://travis-ci.org/heera/requent) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/heera/requent/master/LICENSE)
 
-An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent with zero configuration. It maps a request to eloquent query and transforms the result based on query parameters. It also supports to transform the query result explicitly using user defined transformers which provides a more secured way to exchange data from a public API with minimul effort.
+An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent with zero configuration. It maps a request to eloquent query and transforms the result based on query parameters. It also supports to transform the query result explicitly using user defined transformers which provides a more secured way to exchange data from a public API with minimal effort.
 
 1. [Installation](#installation)
-2. [Basic Usage](#basic-usage)
-3. [The Use Case](#the-use-case)
+2. [How It Works](#how-it-works)
+3. [Basic Example](#basic-example)
+4. [Resource](#resource)
+5. [Methods](#methods)
+6. [Resource Key By](#key-by)
+7. [Data Filtering (Transformers)](#transformer)
 
 ## <a name="installation">Installation
 
@@ -14,17 +18,19 @@ Add the following line in your "composer.json" file within "require" section and
 
 This will install the package and once the installation is finished then you can start using it without any configurations but you can configure it for your need.
 
-## <a name="basic-usage">Basic Usage:
+## <a name="how-it-works">How It Works
 
-To use the package in any of your controllers, you can import it using `use Requent\Requent` and can make an instance of it using `app(Requent::class)` from within any method but you can use the Requent facade class. To use the facade, you need to register the `ServiceProvider` class and the `Facade` class in your `config\app.php` file. To register the service provider add the following line in the `providers` array of your `config\app.php`:
+This package will allow us to query resources through the request query string parameter. For example, if we've a `User` model and the `User` model has many posts (`Post` model) and each post has many comments (`Comment` model) then we can query the users with their posts and comments of each posts by sending a request like the followig: `http://example.com/users?fields=posts{comments}`. This is the most basic use case but it offers more. We can also select properties of each model through query string, for example, if we want to select only the emal field from the `User` model and title from `Post` and body from the `Comment` model then we can just do it by sending a request like the following: `http://example.com/users?fields=email,posts{title,comments{body}}`.
 
-    Requent\RequentServiceProvider::class,
-    
-Then, add the following line in the `aliases` section:
+## <a name="basic-example">Basic Example
 
-    'Requent' => Requent\Facade\Requent::class,
-    
-Now, you can use the package using the `Requent` facade from any controller, for example:
+To use this package, we need to create some resources (Eloquent Models). For this demonstration, we'll use the same idea using User, Post and Comment models for an imaginary blog. The User model has a `hasMany` relation for posts and the Post model has a `hasMany` relation for comments. So, we need a route, which could be a resourceful route but we'll use an explicite route declaration here:
+
+```php
+Route::get('users', 'UserController@index');
+```
+
+Now, we need a controller which is just a simple controller, i.e:
 
 ```php
 <?php
@@ -43,29 +49,183 @@ class UserController extends Controller
     }
 }
 ```
+Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email property) with all the related posts (only title property) and all the comments of each post (only body propert).
 
-## <a name="the-use-case">The Use Case
+If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it more.
 
-So far, we just saw how to install and use it in our controller classes but we need to understand the ues case of the package first. So, the package actually allow us to read any resource from an end point (route) using GQL (Graph Query Language) like interface. For example, imagine that, we've a `User` model and a `Post` model and a `Comment` model. The `User` has many posts using `hasMany` relationship and each `Post` model have many comments using `hasMany` relationship. So, as usual, we can grab all the posts of a user with comments of each post simply using `User::with('posts.comments')->get()`. Nothing is new here, all the `laravel` things.
-
-To, access any resource, we need a route, so for this example, we can declare a route using the following:
-```php
-Route::get('users', 'UserController@index');
-````
-
-Now, if we hit the route using `http:\\example.com\users`, then it'll retuen all the users with posts and comments of each post. Now, this package will allow us to do the same thing using a different approach. For example, if we make request to the same route using `http:\\example.com\users?fields=posts{comments}` then it'll retuen the expected result. In this case, our `UserController` will need the following code:
+## <a name="resource"> Resource
+Actually, a resource is just an eloquent model, the first method we should call on the `Requent` class is `resource` which sets the primary resource we want to query on. So we can set the resource using couple of ways, for example:
 
 ```php
-public function index()
+Requent::resource(User::class)
+```
+
+Also, we can use an object, i.e:
+
+```php
+Requent::resource(new User)
+```
+
+We can also pass a `Query Builder` for example:
+
+```php
+Requent::resource(app(User::class)->where('role', 'admin'))
+```
+
+So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods of `Requent`).
+
+## <a name="methods"> Methods
+
+#### Get
+
+We've seen `get` method earlier which just returns an array of users which is:
+
+```php
+return Requent::resource(User::class)->get();
+```
+
+#### Paginated Result
+
+At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL`: `http://example.com/users?fields=posts{comments}&paginate`, that's it. Also, we can set the paginator, for example: `http://example.com/users?fields=posts{comments}&paginate=simple`, this will return the paginated result using Laravel's `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
+
+#### Per Page
+
+We can also tell how many pages we want to get for per page and it's just another parameter, for example: `http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`. If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
+
+#### Paginate
+Also, we can call the `paginate` method on the `Requent` directly, for example:
+
+```php
+return Requent::resource(User::class)->paginate(); // or paginate(10)
+```
+
+
+#### Simple Paginate
+
+The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More].(https://laravel.com/docs/5.4/pagination)
+
+```php
+return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
+```
+
+#### Find
+
+If we want to retrieve a single `user` then we can use `find` and `first` method, for example:
+
+```php
+Requent::resource(User::class)->find($id);
+```
+
+#### First
+
+For the first item we can call the `first` method:
+
+```php
+Requent::resource(User::class)->first();
+```
+
+#### Fetch
+
+These are all the available methods for executing query but there is one more method which is `fetch`. This method can return any kind of result, an collection (array), paginated result or a singlr resource. Let's see an example:
+
+```php
+
+// In Controller
+
+public function fetch($id = null)
 {
-    return Requent::resource(User::class)->get();
+    return Requent::resource(User::class)->fetch($id);
+}
+```
+To use this method we need a route like: `Route::get('users/{id?}', 'UserController@fetch')` and then we can use this single route to get all kind of results, for example:
+
+#### Get a collection of users (Array)
+
+```php
+http://example.com/users?fields=posts{comments}`
+```
+
+#### Get paginated result
+
+```php
+http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+```
+
+#### Get a single user (Array)
+
+```php
+http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+```
+
+This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
+
+### <a name="key-by"> Resource Key By
+
+The query results for a collection is simply an array with a zero based index but if we want then we can wrap our collection in a key using `keyBy` method, for example:
+
+```php
+return Requent::resource(User::class)->keyBy('users')->get();
+```
+
+This will return a collection of users (Array) as a key value pair where the key will be `users` and the result will be the valuse of that key. We can also use a key for a single user for example:
+
+```php
+return Requent::resource(User::class)->keyBy('user')->find(1);
+```
+
+In case of `fetch` we can use something like the following:
+
+```php
+public function fetch($id = null)
+{
+    return Requent::resource(User::class)->keyBy($id ? 'user' : 'users')->fetch($id);
 }
 ```
 
-This is the most basic use case but it offers more. We'll see everything step by step but first, let's get the basic overview of it. At this point, the `get` method will return all the users as collection but we can get a paginated result even without changing the code in our `index` method. For exampe, to get a paginated result using `laravel's` default paginator, we can make a request using `http:\\example.com\users?fields=posts{comments}&paginate`. This will return us a paginated result using the `LengthAwarePaginator` but if we want then we can change the paginator by giving the value to the `paginate` parameter using something like `&paginate=simple`. So, we'll get the paginated result using `SimplePaginator`.
+The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` as key.
 
-We can also pass `per_page=10` to get 10 items for per request. In this case, if we pass the `per_page=10` parameter then we can skip the `paginate` parameter unless we want to set the paginator class from `default` to `simple`. So, we can get the paginated result using `http:\\example.com\users?fields=posts{comments}&per_page=10`. We can modify the parameter to indicate the number of pages for pagination in config including other settings. We'll walkthrough each options later.
+## <a name="transformer"> Data Filtering (Transformers)
 
-At this point, we've already selected the relations but if we want then we can also chose the attributes of each resource from the `URL` for example, we can make a request to get only specific attributes from a model using something like the following: `http:\\example.com\users?fields=email,posts{title,comments}`. This will return us `email` of users and `title` of their related `posts` and all related comments of each post but with all properties.
+So far we've seen the default data transformation, which means that, a user can get any property or available relations of the resource just by asking it through the query string parameter `fields` (we can use something else other than `fields`), but there is no way to keep some data private if you are using this for a public `API`. Here, the `transformer` comes into play.
 
-We can also add some query constraints from the `URL` for example, if we want to order posts using 'title' property then we can do it using: `http:\\example.com\users?fields=posts.orderBy('title'){comments}`. So, this is the most basic overview of this package but it also supports custome transformers, which allow us to transform (filter) the query result explicitly where we can control which fields/properties or relations should be loaded by a request. This will allow us to use this package to build public `API`s with more control over our resources. Now, we'll see every available methods the `Requent` offers to interact with any model or every customization options we have.
+By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments}}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return. To create a trunsformer, you just need to create transformer classes by extending the `Requent\Transformer\Transformer` class. For example:
+
+```php
+<?php
+
+namespace App\Http\Transformers;
+
+use Requent\Transformer\Transformer;
+
+class UserTransformer extends Transformer
+{
+    public function transform($model)
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'email' => $model->email,
+        ];
+    }
+}
+```
+
+To use your custom transformer, all you need to pass the transformer class to the `resource` method, i.e:
+
+```php
+return Requent::resource(User::class, UserTransformer::class)->fetch($id);
+```
+
+Also you can pass the class instance:
+
+```php
+return Requent::resource(User::class, new UserTransformer)->fetch($id);
+```
+
+Also, you can set the transformer using `transformBy` method:
+
+```php
+return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id); // or new UserTransformer
+```
+
+This will transform the resource using by calling the `transform` method defined in the transformer class you created.
