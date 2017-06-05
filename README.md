@@ -366,18 +366,14 @@ In this case, when you don't provide a custom transformer to transform data then
 
 In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent` query.
 
-### Transforming Raw Result
+### Transform Raw Result
 
 ```php
 public function fetch($id = null)
 {
-    $result = Requent::resource(User::class)->raw()->fetch($id);
+    $result = Requent::resource(User::class)->raw()->get();
     
-	return $this->transform(
-	   	$result,
-	   	UserTransformer::class,
-	   	$id ? 'user' : 'users'
-	);
+    return $this->transform($result, UserTransformer::class, 'users');
 }
 ```
 
