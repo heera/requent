@@ -345,3 +345,5 @@ class Post extends Model
 According to the setup given above, we can make a request using the following `URL` to get all the users with posts and it's related comments and user: `http://example.com/users?fields=posts{user,comments}`.
 
 In the `PostTransformer` class we've used `item` method inside `user` method, which actually resieves a single `Eloquent` model in `$model` parameter and so we've called the `item` method from the transformer. In the comments method, we've used the `items` method because the `$collection` parameter in comments method recieves a collection of `Comment` models.
+
+So, it's obvious that, to allow the inclussion of any relation from a resource we've to declare a method for that relation using the same name we've used to declare the relation in the `Eloquent` model and relations will be included only if the user selects/includes it within the `fields` parameter. If user selects a relation from a resource that is not exposed throught the transformer using a method, then it'll not be available in the response.
