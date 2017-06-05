@@ -8,7 +8,10 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 4. [Resource](#resource)
 5. [Methods](#methods)
 6. [Resource Key By](#key-by)
-7. [Data Filtering (Transformers)](#transformer)
+7. [Data Filtering Using Transformers](#transformer)
+8. [Get Raw Result](#raw)
+9. [Query Constraints](#query-constraints)
+10. [Customizations](#customizations)
 
 ## <a name="installation">Installation
 
@@ -30,7 +33,7 @@ To use this package, we need to create some resources (Eloquent Models). For thi
 Route::get('users', 'UserController@index');
 ```
 
-Now, we need a controller which is just a simple controller, i.e:
+Now, we need a controller which is just a simple controller, for example:
 
 ```php
 <?php
@@ -49,30 +52,41 @@ class UserController extends Controller
     }
 }
 ```
-Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email property) with all the related posts (only title property) and all the comments of each post (only body propert).
+Now, we can make a request using: `http://example.com/users?fields=email,posts{title,comments{body}}`. This will give us the expected result, which would be an array of users (only email column from `User`) with all the related posts (only title column from `Post`) and all the comments of each post (only body column from `Comment`).
 
-If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it more.
+If we want to load any resource with relations without selecting any properties then we can just do it using the following request: `http://example.com/users?fields=posts{comments}`. This was the most basic example but let's explore it's features.
 
 ## <a name="resource"> Resource
 Actually, a resource is just an eloquent model, the first method we should call on the `Requent` class is `resource` which sets the primary resource we want to query on. So we can set the resource using couple of ways, for example:
 
 ```php
-Requent::resource(User::class)
+$resource = Requent::resource(User::class);
 ```
 
-Also, we can use an object, i.e:
+Also, we can use an object, for example:
 
 ```php
-Requent::resource(new User)
+$resource = Requent::resource(new User);
 ```
 
 We can also pass a `Query Builder` for example:
 
 ```php
-Requent::resource(app(User::class)->where('role', 'admin'))
+$resource = Requent::resource(app(User::class)->where('role', 'admin'));
 ```
 
-So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods of `Requent`).
+So, we can call any scope methods as well, which just returns a `Query Builder` instance. The `resource` method returns the `Requent` object so we can chain methods, for example, we can call any query executing method (including other available methods in `Requent`), for example:
+
+```php
+$result = Requent::resource(
+    app(User::class)->where('role', 'admin')
+)
+->transformUsing(UserTransformer::class)
+->keyBy('users')
+->find($id);
+```
+
+We'll walk-through all the available methods and features that `Requent` offers. Let's continue.
 
 ## <a name="methods"> Methods
 
@@ -102,7 +116,7 @@ return Requent::resource(User::class)->paginate(); // or paginate(10)
 
 #### Simple Paginate
 
-The `simplePaginate` will return paginated result using `Simple Paginator` [Check Laravel Pagination for More].(https://laravel.com/docs/5.4/pagination)
+The `simplePaginate` will return paginated result using `Simple Paginator`. [Check Laravel Documentation](https://laravel.com/docs/5.4/pagination).
 
 ```php
 return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10)
@@ -113,7 +127,7 @@ return Requent::resource(User::class)->simplePaginate(); // or simplePaginate(10
 If we want to retrieve a single `user` then we can use `find` and `first` method, for example:
 
 ```php
-Requent::resource(User::class)->find($id);
+return Requent::resource(User::class)->find($id);
 ```
 
 #### First
@@ -121,7 +135,7 @@ Requent::resource(User::class)->find($id);
 For the first item we can call the `first` method:
 
 ```php
-Requent::resource(User::class)->first();
+return Requent::resource(User::class)->first();
 ```
 
 #### Fetch
@@ -154,10 +168,10 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 #### Get a single user (Array)
 
 ```php
-http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
 ```
 
-This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers [Check the Laravel documentation for more](https://laravel.com/docs/5.4/controllers#resource-controllers).
+This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
 ### <a name="key-by"> Resource Key By
 
@@ -184,11 +198,13 @@ public function fetch($id = null)
 
 The paginated result will remain the same, by default `Laravel` wraps the collection using the `data` as key.
 
-## <a name="transformer"> Data Filtering (Transformers)
+## <a name="transformer"> Data Filtering Using Transformers
+
+>The idea of transformers is taken from [Fractal Transformer](http://fractal.thephpleague.com/transformers/) package. This looks like re-inventing the wheel but actually it's not. The main intention for building the `Requent` package was to allow an easy to use interface for fetching resource/data form a web application (non-public `API`), which allows to read data from server using any `javaScript` framework/library even without defining any transformers. Also, the `Eloquent` query is built dynamically on the run-time to load everything eagerly, while `Fractal` uses lazy loading. So, the `Requent` couldn't utilize the data transforming feature that `Fractal` offers. So, to provide the data filtering layer (for public `API`), the `Requent` needed it's own data filtering mechanism but the `Fractal` package is great and I've used it exclusively on my projects.
 
 So far we've seen the default data transformation, which means that, a user can get any property or available relations of the resource just by asking it through the query string parameter `fields` (we can use something else other than `fields`), but there is no way to keep some data private if you are using this for a public `API`. Here, the `transformer` comes into play.
 
-By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments}}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return. To create a trunsformer, you just need to create transformer classes by extending the `Requent\Transformer\Transformer` class. For example:
+By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return. To create a trunsformer, you just need to create transformer classes by extending the `Requent\Transformer\Transformer` class. For example:
 
 ```php
 <?php
@@ -225,7 +241,158 @@ return Requent::resource(User::class, new UserTransformer)->fetch($id);
 Also, you can set the transformer using `transformBy` method:
 
 ```php
-return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id); // or new UserTransformer
+return Requent::resource(User::class)->transformBy(UserTransformer::class)->fetch($id);
+```
+Also, the `transformBy` method accepts a transformer object instance:
+
+```php
+return Requent::resource(User::class)->transformBy(new UserTransformer)->fetch($id);
 ```
 
-This will transform the resource using by calling the `transform` method defined in the transformer class you created.
+This will transform the resource using by calling the `transform` method defined in the transformer class you created. In this case, the transform mathod will called to transform the `User` model but right now, it'll not load any relations. Which means, if the `URL` is something like: `http://example.com/users?fields=posts{comments}` then only the `User` model will be transformed and the result would be something like the following:
+
+```
+[
+    {
+        id: 1,
+        name: "Aurelio Graham",
+        email: "hharvey@example.org"
+    },
+    {
+        id: 2,
+        name: "Adolfo Weissnat",
+        email: "serena78@example.com",
+    }
+    // ...
+]
+```
+
+To load any relations from the root transformer (`UserTransformer` in this case), we also need to explicitly declare a method using the same name the relation is defined in the model, so for example to load the related posts with each `User`  model we need to declare a `posts` method in our `UserTransformer` class. For example:
+
+```php
+class UserTransformer extends Transformer
+{
+    public function transform($model)
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->name,
+            'email' => $model->email,
+        ];
+    }
+    
+    // To allow inclussion of posts
+    public function posts($model)
+    {
+        return $this->items($model, PostTransformer::class);
+    }
+}
+```
+In this example, we've added a filtering for `Post` model and that's why a user can select the related posts with users from the `URL`, for example: `http://example.com/users?fields=posts`. without the `posts` method in `UserTransformer` a user can't read/fetch the posts relation. At this point, we are not done yet. As you can assume that, we are transforming the posts (Collection) using `items` method available in `UserTransformer` (extended from abstract Transform class) and passing another transformer (PostTransformer) to transform the collection of posts. So, we need to implement the `PostTransformer` and have to implement the `transform` method where we'll explicitly return the transformed array for each `Post` model, for example:
+
+```php
+namespace App\Http\Transformers;
+
+use Requent\Transformer\Transformer;
+
+class PostTransformer extends Transformer
+{
+    public function transform($model)
+    {
+        return [
+            'post_id' => $model->id,
+            'post_title' => $model->title,
+            'post_body' => $model->body,
+        ];
+    }
+
+    // User can select related user for each Post model
+    public function user($model)
+    {
+        return $this->item($model, new UserTransformer);
+    }
+
+    // User can select related comments for each Post model
+    public function comments($collection)
+    {
+        return $this->items($collection, new CommentTransformer);
+    }
+}
+```
+
+In this example, we've implemented the `transform` method for the `Post` model for response filtering so only the `id`, `title` and `body` column will be available for the `Post` model in the response and the related posts will be included only if the user selects the posts through the query string parameter in the `URL`.
+
+In the exmple given above, we've also defined two additional methods, `user` and `comments`. Those methods are also relations of `Post` model. The `user` method is defined as a `belongsTo` relationship which simply maps the related user who published the post and the comments method loads the related comments published under the post. The `Post` model looks something like the followin:
+
+```php
+namespace App;
+
+use App\User;
+use App\Comment;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+}
+
+```
+
+According to the setup given above, we can make a request using the following `URL` to get all the users with posts and it's related comments and user: `http://example.com/users?fields=posts{user,comments}`.
+
+In the `PostTransformer` class we've used `item` method inside `user` method, which actually resieves a single `Eloquent` model in `$model` parameter and so we've called the `item` method from the transformer. In the comments method, we've used the `items` method because the `$collection` parameter in comments method recieves a collection of `Comment` models.
+
+So, it's obvious that, to allow the inclussion of any relation from a resource we've to declare a method for that relation using the same name we've used to declare the relation in the `Eloquent` model and relations will be included only if the user selects/includes it within the `fields` parameter. If user selects a relation from a resource that is not exposed throught the transformer using a method, then it'll not be available in the response.
+
+> The user defined transformers will be used to transform the data only a transformer class is passed as the second parameter in the `resource` method or by calling the `transformBy` method, otherwise, everything will be included in the result/response the user asked for (if those fields/relations are available in the corresponding model).
+
+## <a name="raw"> Get Raw Result
+
+Requent has a `raw` method which could be useful if someone doesn't want to apply any transformation, because after the transformation, the returned data is an array. So if you want to execute the query but you want to ommit the data transformation by default (selection of columns through the query string) then you can use `raw` method, for example:
+
+```php
+$result = Requent::resource(User::class)->raw()->fetch($id);
+```
+
+In this case, when you don't provide a custom transformer to transform data then the requent will transform the data using the defalt transformer. So, if you make a request using `http://example.com/users?fields=email,posts{title}`, then it should return only `email` from the `User` model and `title` from the `Post` model. 
+
+In this case, because of `raw`, the requent will execute the query to load the resource with mentioned relations but it'll not filter the result so the original result returned by the `Eloquent` (could be a collection, paginated data or a modeld) will be returned as the result of `Requent` query.
+
+### Transform Raw Result
+
+```php
+
+use Requent;
+use App\User;
+use App\Http\Controllers\Controller;
+use Requent\Transformer\TransformerHelper;
+use App\Http\Transformers\UserTransformer;
+
+class HomeController extends Controller
+{
+    use TransformerHelper;
+    
+    public function index()
+    {
+        $result = Requent::resource(User::class)->raw()->get();
+    
+        return $this->transform($result, UserTransformer::class, 'users');
+    }
+}
+```
+
+## <a name="query-constraints"> Query Constraints
+
+// TODO:
+
+## <a name="customizations"> Customizations
+
+// TODO:
