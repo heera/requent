@@ -187,3 +187,5 @@ The paginated result will remain the same, by default `Laravel` wraps the collec
 ## <a name="transformer"> Data Filtering (Transformers)
 
 So far we've seen the default data transformation, which means that, a user can get any property or available relations of the resource just by asking it through the query string parameter `fields` (we can use something else other than `fields`), but there is no way to keep some data private if you are using this for a public `API`. Here, the `transformer` comes into play.
+
+By default, the `Requent` uses a `DefaultTransformer` class to return only selected properties/relations, for example, if you send a request using a `URL` like following: `http://example.com/users?fields=email,posts{title,comments{body}}}` then it'll return only selected properties/relations. In this case, it'll return what you ask for it but you may need to define explicitly what properties/relations a user can get from a request through query parameter. For this, you can create a custom transformer where you can tell what to return.
