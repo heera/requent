@@ -93,9 +93,9 @@ So, we can call any scope methods as well, which just returns a `Query Builder` 
 $result = Requent::resource(
     app(User::class)->where('role', 'admin')
 )
-->transformUsing(UserTransformer::class)
+->transformBy(UserTransformer::class)
 ->keyBy('users')
-->find($id);
+->get();
 ```
 
 We'll walk-through all the available methods and features that `Requent` offers. Let's continue.
