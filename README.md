@@ -199,7 +199,8 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
 ```
 
-> When selecting properties of a model/resource using query string, i.e: `fields=name,posts{title}`, we can select a dynamic property (getter/accessor), defined using a `getPropertyAttribute` method.
+> When selecting properties of a model/resource using query string, i.e: `fields=name,posts{title}`, we can select a dynamic property (getter/accessor), defined using a `getPropertyAttribute` method. Check the documentation for [Defining An Accessor](https://laravel.com/docs/5.4/eloquent-mutators#defining-an-accessor).
+
 
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
