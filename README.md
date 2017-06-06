@@ -19,7 +19,7 @@ You can simply run the following command from your terminal to install the packa
 
     composer require sheikhheera/requent
 
-Or add the following line in your "composer.json" file within the "require" section and run `composer install` from terminal:
+Or add the following line in your "composer.json" file within "require" section and run `composer install` from terminal:
 
     "sheikhheera/requent": "1.0.*"
 
