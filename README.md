@@ -453,6 +453,8 @@ http://example.com/1?fields=posts{user,comments.offset(2).limit(1){user}}
 http://example.com/1?fields=posts.orderBy(title).limit(3){user,comments.orderByDesc(id).skip(2).take(1){user}}
 ```
 
+> When using limit/take on a relationship and loading a collection of that relation, you may get wrong result because the limit is applied only once on the query by Laravel. [An old issue here](https://github.com/laravel/framework/issues/4835).
+
 ## <a name="customizations"></a> Customizations
 
 Requent uses some base settings from a config file. By default, it'll work as it's configured but if you need to modify any of the settings then you can publish the config file from vendor to your local app config directory. To publish the config, just execute the following command from your terminal:
