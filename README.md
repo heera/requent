@@ -95,7 +95,7 @@ $result = Requent::resource(
 )
 ->transformBy(UserTransformer::class)
 ->keyBy('users')
-->find($id);
+->get();
 ```
 
 We'll walk-through all the available methods and features that `Requent` offers. Let's continue.
