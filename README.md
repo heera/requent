@@ -15,11 +15,23 @@ An elegant, light-weight GQL (Graph Query Language) like interface for Eloquent 
 
 ## <a name="installation"></a> Installation
 
-Add the following line in your "composer.json" file within "require" section and run `composer install` from terminal:
+You can simply run the following command from your terminal to install the package:
+
+    composer require sheikhheera/requent
+
+Or add the following line in "composer.json" file within "require" section and run `composer install` from terminal:
 
     "sheikhheera/requent": "1.0.*"
 
-This will install the package and once the installation is finished then you can start using it without any configurations but you can configure it for your need.
+This will install the package. Now add the following entry in your `config/app.php` file inside the `providers` section:
+
+    Requent\RequentServiceProvider::class
+    
+Also add the following entry in `aliases` section of your `config/app.php` file:
+
+    'Requent' => Requent\Facade\Requent::class,
+
+If you've done everything right then you can start using it without any configuration but you may customize it.
 
 ## <a name="how-it-works"></a> How It Works
 
@@ -444,17 +456,6 @@ Once you publish the config file to your local `/config` directory then you can 
     |
     */
     'query_identifier' => 'fields',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Search Parameter Name
-    |--------------------------------------------------------------------------
-    |
-    | Here you may define the parameter name for searching anything. 
-    | By default, "search" is set but you may override it if you wish.
-    |
-    */
-    'search_identifier' => 'search',
 
     /*
     |--------------------------------------------------------------------------
