@@ -19,7 +19,15 @@ Add the following line in your "composer.json" file within "require" section and
 
     "sheikhheera/requent": "1.0.*"
 
-This will install the package and once the installation is finished then you can start using it without any configurations but you can configure it for your need.
+This will install the package. Now add the following entry in your `config/app.php` file inside the `providers` section:
+
+    Requent\RequentServiceProvider::class
+    
+Also add the following entry in `aliases` section of your `config/app.php` file:
+
+    'Requent' => Requent\Facade\Requent::class,
+
+If you followed so far then you can start using it without any configurations but you can configure it if your want.
 
 ## <a name="how-it-works"></a> How It Works
 
