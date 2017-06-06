@@ -136,7 +136,7 @@ class Requent
 	protected function buildQuery()
 	{
 		$this->builder = $this->filter(
-			$this->applySearch($this->getBuilder()),
+			$this->getBuilder(),
 			$this->getQueryableData()
 		);
 		return $this;
@@ -261,17 +261,6 @@ class Requent
 	}
 
 	/**
-	 * Get the query string value for search
-	 * @return String
-	 */
-	protected function getSearchQueryValue()
-	{
-		return $this->getQueryStringValue(
-			$this->getConfigValue('search_identifier')
-		);
-	}
-
-	/**
      * Get query string parameter
      * @param  String $key
      * @return Mixed
@@ -297,52 +286,6 @@ class Requent
     	if(isset($this->config[$key])) {
     		return $this->config[$key];
     	}
-    }
-
-	/**
-	 * Start to apply search using LIKE operator on searchable fields
-	 * @param  Illuminate\Database\Eloquent\Builder $builder
-	 * @return Illuminate\Database\Eloquent\Builder
-	 * @throws BadMethodCallException
-	 */
-	protected function applySearch(Builder $builder)
-    {
-        try {
-        	if ($search = $this->getSearchQueryValue()) {
-	            $searchables = (Array) $builder->getModel()->requentSearchables();
-	            $builder->where(function($query) use ($searchables, $search) {
-	            	$search = strpos($search, '%') !== false ? $search : "%$search%";
-	                $query->where(array_shift($searchables), 'LIKE', $search);
-	                $this->buildSearchQuery($query, $searchables, $search);
-	            });
-	        }
-	        return $builder;
-        } catch(BadMethodCallException $e) {
-        	return $builder;
-        }
-    }
-
-    /**
-     * Loop and apply search using LIKE operator on all searchable fields
-     * @param  Illuminate\Database\Eloquent\Builder $builder 
-     * @param  Array  $searchables
-     * @param  String  $search
-     * @return Illuminate\Database\Eloquent\Builder
-     */
-    protected function buildSearchQuery(Builder $builder, $searchables, $search)
-    {
-        foreach($searchables as $key => $searchable) {
-            if(is_array($searchable) && method_exists($builder->getModel(), $key)) {
-                $builder->orWhereHas($key, function($query) use ($searchable, $search) {
-                    $query->where(array_shift($searchable), 'LIKE', $search);
-                    $this->buildSearchQuery($query, $searchable, $search);
-                });
-            } else {
-                $builder->orWhere($searchable, 'LIKE', $search);
-            }
-        }
-
-        return $builder;
     }
 
     /**
