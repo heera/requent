@@ -16,17 +16,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Search Parameter Name
-    |--------------------------------------------------------------------------
-    |
-    | Here you may define the parameter name for searching anything. 
-    | By default, "search" is set but you may override it if you wish.
-    |
-    */
-    'search_identifier' => 'search',
-
-    /*
-    |--------------------------------------------------------------------------
     | Paginator Identifier
     |--------------------------------------------------------------------------
     |
