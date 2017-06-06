@@ -459,17 +459,6 @@ Once you publish the config file to your local `/config` directory then you can 
 
     /*
     |--------------------------------------------------------------------------
-    | Search Parameter Name
-    |--------------------------------------------------------------------------
-    |
-    | Here you may define the parameter name for searching anything. 
-    | By default, "search" is set but you may override it if you wish.
-    |
-    */
-    'search_identifier' => 'search',
-
-    /*
-    |--------------------------------------------------------------------------
     | Paginator Identifier
     |--------------------------------------------------------------------------
     |
