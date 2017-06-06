@@ -31,7 +31,7 @@ Also add the following entry in `aliases` section of your `config/app.php` file:
 
     'Requent' => Requent\Facade\Requent::class,
 
-If you done everything right then you can start using it without any configurations but you can customize it if your need.
+If you've done everything right then you can start using it without any configuration but you can customize it if you need.
 
 ## <a name="how-it-works"></a> How It Works
 
