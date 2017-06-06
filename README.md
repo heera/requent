@@ -445,9 +445,9 @@ php artisan vendor:publish --provider="Requent\RequentServiceProvider" --tag="co
 Once you publish the config file to your local `/config` directory then you can modify any settings to customize `Requent` for your need. Follwing code is taken from the config file which is documented itself.
 
 ```
-/*
+    /*
     |--------------------------------------------------------------------------
-    | Query Parameter Name
+    | Query Identifier
     |--------------------------------------------------------------------------
     |
     | Here you may define the parameter name to pass your query string
