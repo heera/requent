@@ -2,7 +2,7 @@
     "name": "sheikhheera/requent",
     "license": "MIT",
     "description": "A GraphQL like interface to map a request to eloquent query with data transformation.",
-    "keywords": ["requent", "api", "json", "transformer", "gql", "graph", "query"],
+    "keywords": ["requent", "api", "json", "transformer", "gql", "graph", "query", "laravel"],
     "authors": [
         {
             "name": "Sheikh Heera",
