@@ -39,7 +39,7 @@ This package will allow us to query resources through the request query string p
 
     http://example.com/users?fields=email,posts.orderByDesc(id){title,comments{body}}
 
-It'll be translated into something similar to following:
+It'll be translated into something similar to following (Not literally):
 
 ```php
 User::select('email')
@@ -198,6 +198,8 @@ http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
 ```php
 http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
 ```
+
+> When selecting properties of a model/resource using query string, i.e: `fields=name,posts{title}`, we can select a dynamic property (getter/accessor), defined using a `getPropertyAttribute` method.
 
 This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
