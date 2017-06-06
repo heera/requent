@@ -4,7 +4,7 @@ return [
     
     /*
     |--------------------------------------------------------------------------
-    | Query Parameter Name
+    | Query Identifier
     |--------------------------------------------------------------------------
     |
     | Here you may define the parameter name to pass your query string
