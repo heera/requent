@@ -505,3 +505,5 @@ Once you publish the config file to your local `/config` directory then you can 
     */
     'select_default_attributes' => true,
 ```
+
+To be continued...
