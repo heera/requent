@@ -128,11 +128,23 @@ return Requent::resource(User::class)->get();
 
 #### Paginated Result
 
-At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL`: `http://example.com/users?fields=posts{comments}&paginate`, that's it. Also, we can set the paginator, for example: `http://example.com/users?fields=posts{comments}&paginate=simple`, this will return the paginated result using Laravel's `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
+At this point, we'll get an array but we can retrieve paginated result using same `get` method and in this case we, we only need to provide a query string parameter in our `URL` like the following example:
+
+    http://example.com/users?fields=posts{comments}&paginate
+
+Also, we can set the paginator, for example:
+
+    http://example.com/users?fields=posts{comments}&paginate=simple
+    
+This will return the paginated result using `SimplePaginator` but by default it'll use `LengthAwarePaginator`.
 
 #### Per Page
 
-We can also tell how many pages we want to get for per page and it's just another parameter, for example: `http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`. If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
+We can also tell how many pages we want to get for per page and it's just another parameter, for example:
+
+    http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5
+    
+If we provide `per_page=n` then we don't need to provide `&paginate` parameter unless we want to use the simple paginator instead of `default`. We can also customize these parameters, we'll check later on.
 
 #### Paginate
 Also, we can call the `paginate` method on the `Requent` directly, for example:
@@ -140,7 +152,6 @@ Also, we can call the `paginate` method on the `Requent` directly, for example:
 ```php
 return Requent::resource(User::class)->paginate(); // or paginate(10)
 ```
-
 
 #### Simple Paginate
 
@@ -184,25 +195,25 @@ To use this method we need a route like: `Route::get('users/{id?}', 'UserControl
 #### Get a collection of users (Array)
 
 ```php
-http://example.com/users?fields=posts{comments}`
+http://example.com/users?fields=posts{comments}
 ```
 
 #### Get paginated result
 
 ```php
-http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5`
+http://example.com/users?fields=posts{comments}&paginate=simple&per_page=5
 ```
 
 #### Get a single user (Array)
 
 ```php
-http://example.com/users/1?fields=posts{comments}&paginate=simple&per_page=5`
+http://example.com/users/1?fields=posts{comments}
 ```
+
+The `fetch` method will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
 > When selecting properties of a model/resource using query string, i.e: `fields=name,posts{title}`, we can select a dynamic property (getter/accessor), defined using a `getPropertyAttribute` method. Check the documentation for [Defining An Accessor](https://laravel.com/docs/5.4/eloquent-mutators#defining-an-accessor).
 
-
-This will be useful if we declare explicit route other than RESTfull routes for Resource Controllers. [Check Laravel Documentation](https://laravel.com/docs/5.4/controllers#resource-controllers).
 
 ## <a name="key-by"></a> Resource Key By
 
@@ -419,6 +430,8 @@ class HomeController extends Controller
     }
 }
 ```
+
+In this example, the third parameter `users` passed to transform method is optional, which would be used as the resource key.
 
 ## <a name="query-clause"></a> Query Modifier Clause
 
