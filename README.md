@@ -433,6 +433,23 @@ class HomeController extends Controller
 
 In this example, the third parameter `users` passed to transform method is optional, which would be used as the resource key.
 
+> The `Requent` doesn't use lazy loading, which means that, everything (relations) is eager loaded and when it comes to transformer (transform method), the quwey has been already executed and everything is loaded. So, at this point, the `transform` method will recieve a model and and if we want to load other relations that was not loaded through the query, then we can simply call the `load` method on the model before transforming it, for example:
+
+```php
+public function transform($model)
+{
+    if(!$model->relationLoaded('comments')) {
+        $model->load('comments');
+    }
+    
+    return [
+        'post_id' => $model->id,
+        'post_title' => $model->title,
+        'post_body' => $model->body,
+    ];
+}
+```
+
 ## <a name="query-clause"></a> Query Modifier Clause
 
 When we make a request, we can add some query modifier clauses for example, `orderBy`, `orderByDesc` e.t.c. There are several clauses that `Requent` offers to use in the `URL`, those are given below:
