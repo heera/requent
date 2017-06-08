@@ -55,7 +55,7 @@ abstract class Transformer extends BaseTransformer
     public function transformItem($model, $transformer)
     {
         if(!$model || is_array($model)) return $model;
-        $transformed = $transformer->transform($model);
+        $transformed = $this->make($transformer)->transform($model);
         return $this->transformRelations(
             $model, $this->make($transformer), $transformed
         );
