@@ -26,10 +26,7 @@ trait QueryBuilderMethods
 	public function get($columns = ['*'])
     {
         if(($perPage = $this->perPage()) || $this->isPaged()) {
-            $pagination = $this->getQueryStringValue(
-                $this->getConfigValue('paginator_identifier')
-            );
-            return $this->callPaginate($pagination, $perPage, $columns);
+            return $this->callPaginate($perPage, $columns);
         }
         return $this->transform($this->builder->get($columns));
     }
@@ -116,17 +113,28 @@ trait QueryBuilderMethods
 
     /**
      * Call the appropriate pagination method
-     * @param  String $pagination Pagination Type
      * @param  Int $perPage
      * @param  Array $columns
      * @return Mixed
      */
-    protected function callPaginate($pagination, $perPage, $columns)
+    protected function callPaginate($perPage, $columns)
     {
-        if($pagination != 'simple') {
+        if($this->getPaginator() != 'simple') {
             return $this->paginate($perPage, $columns);
         }
         return $this->simplePaginate($perPage, $columns);
+    }
+
+    /**
+     * Determine the paginator to be used
+     * @return Array
+     */
+    protected function getPaginator()
+    {
+        $paginator = $this->getQueryStringValue(
+            $this->getConfigValue('paginator_identifier')
+        );
+        return $paginator ?: $this->getConfigValue('default_paginator');
     }
 
     /**
