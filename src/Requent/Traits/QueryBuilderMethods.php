@@ -4,8 +4,8 @@ namespace Requent\Traits;
 
 trait QueryBuilderMethods
 {
-	use QueryModifierMethods, TransformerMethods;
-	
+    use QueryModifierMethods, TransformerMethods;
+    
     /**
      * Proxy to query builder methods (get/find)
      * @param  Mixed $id
@@ -23,9 +23,9 @@ trait QueryBuilderMethods
      * @param  Array  $columns
      * @return Array (Transformed Result)
      */
-	public function get($columns = ['*'])
+    public function get($columns = ['*'])
     {
-        if(($perPage = $this->perPage()) || $this->isPaged()) {
+        if (($perPage = $this->perPage()) || $this->isPaged()) {
             return $this->callPaginate($perPage, $columns);
         }
         return $this->transform($this->builder->get($columns));
@@ -97,7 +97,7 @@ trait QueryBuilderMethods
 
     /**
      * Check if the paginated result is required
-     * and find out the amount for the per page 
+     * and find out the amount for the per page
      * @return Mixed
      */
     protected function perPage()
@@ -119,7 +119,7 @@ trait QueryBuilderMethods
      */
     protected function callPaginate($perPage, $columns)
     {
-        if($this->getPaginator() != 'simple') {
+        if ($this->getPaginator() != 'simple') {
             return $this->paginate($perPage, $columns);
         }
         return $this->simplePaginate($perPage, $columns);
@@ -138,7 +138,7 @@ trait QueryBuilderMethods
     }
 
     /**
-     * Normalize the method parameters 
+     * Normalize the method parameters
      * @param  Int $perPage
      * @param  Mixed $columns
      * @return Array

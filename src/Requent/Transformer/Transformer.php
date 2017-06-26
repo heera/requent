@@ -13,7 +13,7 @@ abstract class Transformer extends BaseTransformer
      * @param  Illuminate\Database\Eloquent\Model $model
      * @return Array Transformed Result
      */
-    public abstract function transform($model);
+    abstract public function transform($model);
 
     /**
      * Transforms paginated result.
@@ -54,7 +54,9 @@ abstract class Transformer extends BaseTransformer
      */
     public function transformItem($model, $transformer)
     {
-        if(!$model || is_array($model)) return $model;
+        if (!$model || is_array($model)) {
+            return $model;
+        }
         $transformed = $this->make($transformer)->transform($model);
         return $this->transformRelations(
             $model, $this->make($transformer), $transformed
@@ -71,7 +73,7 @@ abstract class Transformer extends BaseTransformer
     protected function transformRelations($model, $transformer, $transformed)
     {
         foreach ($model->getRelations() as $key => $relation) {
-            if(method_exists($transformer, $key)) {
+            if (method_exists($transformer, $key)) {
                 $transformed[snake_case($key)] = $this->transformRelation(
                     $transformer, $key, $relation
                 );
@@ -111,7 +113,7 @@ abstract class Transformer extends BaseTransformer
      */
     public function __call($method, $params)
     {
-        if(in_array($method, ['item', 'items'])) {
+        if (in_array($method, ['item', 'items'])) {
             $method = 'transform'.studly_case($method);
             return $this->{strtolower($method)}(...$params);
         }

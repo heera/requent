@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Requent\Transformer\UserTransformer;
 use Illuminate\Database\Eloquent\Collection;
 
-
 class RequentTest extends TestCase
 {
     public function testBasic()

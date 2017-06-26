@@ -39,19 +39,21 @@ class DefaultTransformer extends BaseTransformer
         return $result->toArray();
     }
     
-	/**
-	 * Transform a single item/model
-	 * @param  Mixed $model
-	 * @param  Mixed $selectables
-	 * @return Mixed
-	 * @throws Requent\Transformer\TransformerException
-	 */
-	protected function transformItem($model, $selectables)
-	{
-		if(is_array($model)) return $model;
+    /**
+     * Transform a single item/model
+     * @param  Mixed $model
+     * @param  Mixed $selectables
+     * @return Mixed
+     * @throws Requent\Transformer\TransformerException
+     */
+    protected function transformItem($model, $selectables)
+    {
+        if (is_array($model)) {
+            return $model;
+        }
 
         // If nothing was selected through query string
-        if(!$selectables || !is_array($selectables)) {
+        if (!$selectables || !is_array($selectables)) {
             return $model->toArray();
         }
 
@@ -69,15 +71,15 @@ class DefaultTransformer extends BaseTransformer
         }
 
         return $result;
-	}
+    }
 
-	/**
-	 * Check if a given attribute is available
-	 * @param  Illuminate\Database\Eloquent\Model $model
-	 * @param  String $key
-	 * @return Boolean
-	 */
-	protected function hasAttribute($model, $key)
+    /**
+     * Check if a given attribute is available
+     * @param  Illuminate\Database\Eloquent\Model $model
+     * @param  String $key
+     * @return Boolean
+     */
+    protected function hasAttribute($model, $key)
     {
         return array_key_exists(
             $key, $model->getAttributes()
@@ -93,7 +95,7 @@ class DefaultTransformer extends BaseTransformer
     protected function getAttribute($model, $key)
     {
         $attribute = $model->getAttributeValue($key);
-        if($attribute instanceof Carbon) {
+        if ($attribute instanceof Carbon) {
             return $attribute->toDateTimeString();
         }
         return $attribute;
@@ -107,11 +109,11 @@ class DefaultTransformer extends BaseTransformer
      */
     protected function getSelectbles($selectables, $model)
     {
-    	if($this->getConfigValue('select_default_attributes')) {
-    		if(!array_diff_key($selectables, $relations = $model->getRelations())) {
-	    		return array_merge(array_diff_key($model->toArray(), $relations), $selectables);
-	    	}
-    	}
-    	return $selectables;
+        if ($this->getConfigValue('select_default_attributes')) {
+            if (!array_diff_key($selectables, $relations = $model->getRelations())) {
+                return array_merge(array_diff_key($model->toArray(), $relations), $selectables);
+            }
+        }
+        return $selectables;
     }
 }

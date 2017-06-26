@@ -15,14 +15,16 @@ trait TransformerMethods
      */
     protected function transform($result)
     {
-        if($this->original) return $result;
+        if ($this->original) {
+            return $result;
+        }
 
         $transformed = $this->resolveTransformer()->transformResult(
             $result, $this->getSelectables($this->selectedColumns)
         );
 
-        if(!$this->isPaginated($result)) {
-            if($resourceKey = $this->getResourceKey()) {
+        if (!$this->isPaginated($result)) {
+            if ($resourceKey = $this->getResourceKey()) {
                 return [$resourceKey => $transformed];
             }
         }
@@ -36,7 +38,7 @@ trait TransformerMethods
      */
     protected function resolveTransformer()
     {
-        if(is_string($this->transformer)) {
+        if (is_string($this->transformer)) {
             $this->transformer = new $this->transformer;
         }
 
@@ -50,7 +52,7 @@ trait TransformerMethods
      */
     protected function getSelectables($selectables)
     {
-        if($this->transformer instanceof Transformer) {
+        if ($this->transformer instanceof Transformer) {
             return $this->transformer;
         }
         
@@ -65,10 +67,10 @@ trait TransformerMethods
     protected function getFieldsForDefaultTransformer($selectables)
     {
         $paramName = $this->getConfigValue('query_identifier');
-        foreach($selectables as $field => $value) {
-            if($value !== true) {
-                if(isset($value[$paramName])) {
-                    if(!empty($value[$paramName])) {
+        foreach ($selectables as $field => $value) {
+            if ($value !== true) {
+                if (isset($value[$paramName])) {
+                    if (!empty($value[$paramName])) {
                         $selectables[$field] = $this->{__FUNCTION__}($value[$paramName]);
                     } else {
                         unset($selectables[$field]);
