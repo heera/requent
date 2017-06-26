@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class BaseTransformer
 {
-	/**
+    /**
      * Config
      * @var Array
      */
@@ -19,7 +19,7 @@ class BaseTransformer
      * Set config
      * @param Array $config
      */
-    public function setConfig(Array $config)
+    public function setConfig(array $config)
     {
         $this->config = $config;
         return $this;
@@ -32,9 +32,11 @@ class BaseTransformer
      */
     protected function getConfigValue($key = null)
     {
-        if(!$key) return $this->config;
+        if (!$key) {
+            return $this->config;
+        }
 
-        if(isset($this->config[$key])) {
+        if (isset($this->config[$key])) {
             return $this->config[$key];
         }
     }
@@ -51,7 +53,7 @@ class BaseTransformer
 
     /**
      * Transform the result given by QueryBuilder
-     * 
+     *
      * @param  Mixed $result
      * @param  Array $transformer
      * @return Array

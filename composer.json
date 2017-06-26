@@ -32,5 +32,15 @@
         "classmap": [
             "tests/TestCase.php"
         ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Requent\\RequentServiceProvider"
+            ],
+            "aliases": {
+                "Requent": "Requent\\Facade\\Requent"
+            }
+        }
     }
 }

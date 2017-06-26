@@ -7,16 +7,16 @@ use Requent\Transformer\PostTransformer;
 
 class UserTransformer extends AbstractTransformer
 {
-	public function transform($model)
-	{
-		return [
-			'name' => $model->name,
-			'email' => $model->email
-		];
-	}
+    public function transform($model)
+    {
+        return [
+            'name' => $model->name,
+            'email' => $model->email
+        ];
+    }
 
-	public function posts($collection)
-	{
-		return $this->items($collection, PostTransformer::class);
-	}
+    public function posts($collection)
+    {
+        return $this->items($collection, PostTransformer::class);
+    }
 }

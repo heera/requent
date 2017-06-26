@@ -9,7 +9,7 @@ class QueryStringParser
         return (new static)->parseValue(str_split($input), $paramName);
     }
 
-    protected function parseValue(Array $chars, $paramName = 'fields')
+    protected function parseValue(array $chars, $paramName = 'fields')
     {
         $end = count($chars);
         $current = '';
@@ -62,7 +62,7 @@ class QueryStringParser
         return $output;
     }
 
-    protected function getNestedLength(Array $chars, $offset)
+    protected function getNestedLength(array $chars, $offset)
     {
         $nested = 0;
         $end = count($chars);
@@ -70,7 +70,7 @@ class QueryStringParser
         while ($i < $end) {
             $char = $chars[$i];
             switch ($char) {
-                case '{';
+                case '{':
                     $nested++;
                     break;
                 case '}':
@@ -85,7 +85,7 @@ class QueryStringParser
         throw new \Exception('Nested operator {} do not match');
     }
 
-    protected function getMethodLength(Array $chars, $offset)
+    protected function getMethodLength(array $chars, $offset)
     {
         $pos = strpos(join($chars), ')', $offset);
         if ($pos > $offset) {
@@ -95,7 +95,7 @@ class QueryStringParser
         }
     }
 
-    protected function parseMethod(Array $chars, $paramName)
+    protected function parseMethod(array $chars, $paramName)
     {
         try {
             $str = join($chars);
@@ -109,7 +109,7 @@ class QueryStringParser
                 default:
                     return [$methodName, $param];
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new \InvalidArgumentException('Method operator () do not match');
         }
     }

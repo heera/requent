@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Facade;
 
 class Requent extends Facade
 {
-	public static function getFacadeAccessor()
-	{
-		return 'requent';
-	}
+    public static function getFacadeAccessor()
+    {
+        return 'requent';
+    }
 }
