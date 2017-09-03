@@ -23,6 +23,9 @@ Or add the following line in "composer.json" file within "require" section and r
 
     "sheikhheera/requent": "1.0.*"
 
+> If you are on version `>=5.5` then you are all done, no need to add service provider or alias in `config\app`. So you can simply skip the following steps.
+
+
 This will install the package. Now add the following entry in your `config/app.php` file inside the `providers` section:
 
     Requent\RequentServiceProvider::class
